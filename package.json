@@ -1,0 +1,23 @@
+{
+  "name": "landing",
+  "version": "1.0.0",
+  "description": "Landing page",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "gh-pages -d src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Octa96mz/landing.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Octa96mz/landing/issues"
+  },
+  "homepage": "https://github.com/Octa96mz/landing#readme",
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
+  }
+}
