@@ -1,106 +1,205 @@
 <!doctype html>
-<html>
-
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="./assets/main.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Portfolio de Octavio Montoya Zanini: desarrollo web y analítica web, Barcelona.">
+<title>Octavio Montoya Zanini</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Layout: single column, wide project rows with a left meta rail; engineering notes as the main voice */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --fg:#14202b; --muted:#566574; --line:#d6dde4;
+  --accent:#0b6e6e; --accent-fg:#ffffff; --tag:#e4eef0;
+  --display:'Space Grotesk',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f161d; --surface:#16202a; --fg:#e6edf3; --muted:#9aabba; --line:#27343f; --accent:#5ec4c0; --accent-fg:#0f161d; --tag:#1d2c35; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f161d; --surface:#16202a; --fg:#e6edf3; --muted:#9aabba; --line:#27343f; --accent:#5ec4c0; --accent-fg:#0f161d; --tag:#1d2c35; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);margin:0;padding-block:0 4rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:60rem;margin:0 auto}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+html[data-lang="es"] .en,html[data-lang="en"] .es{display:none!important}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-block:1.25rem;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{font:500 .85rem var(--mono);letter-spacing:.04em}
+nav{display:flex;gap:1.25rem;align-items:center;flex-wrap:wrap;font-size:.9rem}
+nav a{color:var(--muted);text-decoration:none}nav a:hover{color:var(--accent)}
+.lang{font:500 .8rem var(--mono);background:none;border:1px solid var(--line);color:var(--fg);padding:.3rem .6rem;border-radius:4px;cursor:pointer}
+.hero{padding-block:4rem 3rem;display:grid;gap:1.25rem}
+.hero h1{font:700 clamp(2.2rem,6vw,3.8rem)/1.05 var(--display);margin:0;text-wrap:balance;letter-spacing:-.02em}
+.hero p{max-width:40rem;font-size:1.1rem;color:var(--muted);margin:0}
+.cta{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.5rem}
+.btn{display:inline-block;padding:.6rem 1.1rem;border-radius:4px;text-decoration:none;font-weight:600;font-size:.95rem;border:1px solid var(--accent)}
+.btn.main{background:var(--accent);color:var(--accent-fg)}
+.btn.alt{color:var(--accent)}
+h2{font:700 1.6rem var(--display);margin:0 0 1.5rem;letter-spacing:-.01em}
+.label{font:500 .75rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+section{padding-block:2.5rem;border-top:1px solid var(--line)}
+.proj{display:grid;grid-template-columns:12rem minmax(0,1fr);gap:1.5rem;padding-block:1.75rem;border-top:1px solid var(--line)}
+.proj:first-of-type{border-top:0;padding-top:0}
+.meta{display:grid;gap:.5rem;align-content:start}
+.status{font:500 .75rem var(--mono);padding:.2rem .5rem;border-radius:3px;background:var(--tag);color:var(--accent);width:fit-content}
+.proj h3{font:700 1.3rem var(--display);margin:0 0 .5rem}
+.proj p{margin:0 0 .75rem;max-width:42rem}
+ul.pts{margin:0 0 .9rem;padding-left:1.1rem;max-width:42rem}ul.pts li{margin-bottom:.3rem}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem}
+.tags span{font:400 .75rem var(--mono);background:var(--tag);padding:.15rem .5rem;border-radius:3px}
+.links{display:flex;gap:1rem;flex-wrap:wrap;font-size:.9rem;font-weight:500}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:1.1rem}
+.card b{display:block;font-family:var(--display);margin-bottom:.25rem}
+.card span{color:var(--muted);font-size:.9rem}
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1.25rem}
+.stack div{display:grid;gap:.35rem}
+.stack p{margin:0;font-size:.95rem}
+.copy{font:400 .95rem var(--mono);background:var(--surface);border:1px solid var(--line);padding:.5rem .8rem;border-radius:4px;cursor:pointer;color:var(--fg)}
+footer{padding-top:2rem;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+@media(max-width:640px){.proj{grid-template-columns:1fr;gap:.75rem}.hero{padding-block:2.5rem 2rem}}
+@media(prefers-reduced-motion:no-preference){a,.btn{transition:color .15s,background .15s}}
+</style>
+
 </head>
-
 <body>
-  <div class="relative bg-white overflow-hidden">
-    <div class="max-w-7xl mx-auto">
-      <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-        <svg class="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
-          fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <polygon points="50,0 100,0 50,100 0,100" />
-        </svg>
-        <div>
-          <div class="relative pt-6 px-4 sm:px-6 lg:px-8">
-            <nav class="relative flex items-center justify-between sm:h-10 lg:justify-start" aria-label="Global">
-              <div class="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
-                <div class="flex items-center justify-between w-full md:w-auto">
-                  <a href="#">
-                    <span class="sr-only">Title</span>
-                    <img class="h-8 w-auto sm:h-10" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg">
-                  </a>
-                </div>
-              </div>
-              <div class="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
-                <a href="#" class="font-medium text-gray-500 hover:text-gray-900">About</a>
-                <a href="#" class="font-medium text-gray-500 hover:text-gray-900">Projects</a>
-                <a href="#" class="font-medium text-gray-500 hover:text-gray-900">Contact</a>
-              </div>
-            </nav>
-          </div>
-        </div>
+<div class="wrap">
+<header class="top">
+  <span class="brand">octa96mz</span>
+  <nav>
+    <a href="#proyectos"><span class="es">Proyectos</span><span class="en">Projects</span></a>
+    <a href="#analitica"><span class="es">Analítica</span><span class="en">Analytics</span></a>
+    <a href="#stack">Stack</a>
+    <a href="#contacto"><span class="es">Contacto</span><span class="en">Contact</span></a>
+    <button class="lang" id="lang" type="button" aria-label="Cambiar idioma / Switch language">ES / EN</button>
+  </nav>
+</header>
 
-        <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-          <div class="sm:text-center lg:text-left">
-            <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-              <span class="block xl:inline">Octavio Nicolas Montoya Zanini</span>
-              <span class="block text-indigo-600 xl:inline" ><a href="https://www.github.com/Octa96mz/">GitHub</a> </span>
-              <span class="block text-indigo-600 xl:inline" ><a href="https://www.linkedin.com/in/octavio-nicolas-montoya-zanini/">LinkedIn</a> </span>
-            </h1>
-            <p
-              class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-              Soy un estudiante autodidacta responsable y perseverante. Me gusta trabajar en equipo y la tecnología. Soy una persona curiosa y me encanta aprender cosas nuevas constantemente. 
-Mi objetivo principal, en el corto y mediano plazo, continuar aprendiendo sobre programación y tecnología, así como también, sumar experiencia en la industria del software profundizando mis conocimientos en el campo laboral.</p>
-          </div>
-        </main>
-      </div>
-    </div>
-    <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-      <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
-        src="img/imagen.jpg" alt="foto">
-    </div>
+<div class="hero">
+  <span class="label">Barcelona</span>
+  <h1><span class="es">Desarrollo web y analítica web.</span><span class="en">Web development and web analytics.</span></h1>
+  <p class="es">Soy Octavio Montoya Zanini. Construyo herramientas reales en JavaScript, TypeScript y Linux, y mido lo que funciona con Google Analytics y Tag Manager. Busco mi primer puesto como desarrollador, en un equipo donde pueda unir producto y datos.</p>
+  <p class="en">I'm Octavio Montoya Zanini. I build real tools in JavaScript, TypeScript and Linux, and measure what works with Google Analytics and Tag Manager. I'm looking for my first developer role, on a team where product and data meet.</p>
+  <div class="cta">
+    <a class="btn main" href="https://github.com/Octa96mz" target="_blank" rel="noopener">GitHub</a>
+    <a class="btn alt" href="https://www.linkedin.com/in/octavio-nicolas-montoya-zanini" target="_blank" rel="noopener">LinkedIn</a>
   </div>
-  <div class="bg-white">
-    <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-      <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Last YouTube Videos</h2>
-      <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8" id="content">
-        <!-- content -->
+</div>
 
-      </div>
+<section id="proyectos">
+  <h2><span class="es">Proyectos</span><span class="en">Projects</span></h2>
+
+  <article class="proj">
+    <div class="meta"><span class="status es">Público · MIT</span><span class="status en">Public · MIT</span><span class="label">Linux · seguridad</span></div>
+    <div>
+      <h3>wifi-publica</h3>
+      <p class="es">Herramienta de endurecimiento para redes wifi públicas en CachyOS y Omarchy. Combina un kill switch con nftables y un túnel WireGuard con varios servidores de Proton VPN Free, y añade módulos para la barra del escritorio.</p>
+      <p class="en">A hardening tool for public wifi on CachyOS and Omarchy. It combines an nftables kill switch with a WireGuard tunnel across several Proton VPN Free servers, plus desktop bar modules.</p>
+      <ul class="pts es"><li>Suite de 109 tests, CI en GitHub Actions con shellcheck y escaneo de secretos con gitleaks.</li><li>Varias rondas de revisión de seguridad: separación de privilegios, condiciones de carrera y errores de interpretación de políticas nftables.</li><li>Procedimiento de rescate documentado y verificado por un test que impide que vuelva a romperse.</li></ul>
+      <ul class="pts en"><li>109-test suite, GitHub Actions CI with shellcheck and gitleaks secret scanning.</li><li>Several security review rounds: privilege separation, race conditions and nftables policy-parsing bugs.</li><li>A documented recovery procedure, guarded by a test so it cannot regress.</li></ul>
+      <div class="tags"><span>Bash</span><span>nftables</span><span>WireGuard</span><span>QML</span><span>CI</span></div>
+      <div class="links"><a href="https://github.com/Octa96mz/wifi-publica" target="_blank" rel="noopener">GitHub →</a></div>
     </div>
-  </div>
-  <div class="bg-gray-50">
-    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
-      <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-        <span class="block">Contact</span>
-        <span class="block text-indigo-600">keep in touch.</span>
-      </h2>
-      <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48"
-          style=" fill:#000000;">
-          <linearGradient id="awSgIinfw5_FS5MLHI~A9a_yGcWL8copNNQ_gr1" x1="6.228" x2="42.077" y1="4.896" y2="43.432"
-            gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#0d61a9"></stop>
-            <stop offset="1" stop-color="#16528c"></stop>
-          </linearGradient>
-          <path fill="url(#awSgIinfw5_FS5MLHI~A9a_yGcWL8copNNQ_gr1)"
-            d="M42,40c0,1.105-0.895,2-2,2H8c-1.105,0-2-0.895-2-2V8c0-1.105,0.895-2,2-2h32	c1.105,0,2,0.895,2,2V40z">
-          </path>
-          <path
-            d="M25,38V27h-4v-6h4v-2.138c0-5.042,2.666-7.818,7.505-7.818c1.995,0,3.077,0.14,3.598,0.208	l0.858,0.111L37,12.224L37,17h-3.635C32.237,17,32,18.378,32,19.535V21h4.723l-0.928,6H32v11H25z"
-            opacity=".05"></path>
-          <path
-            d="M25.5,37.5v-11h-4v-5h4v-2.638c0-4.788,2.422-7.318,7.005-7.318c1.971,0,3.03,0.138,3.54,0.204	l0.436,0.057l0.02,0.442V16.5h-3.135c-1.623,0-1.865,1.901-1.865,3.035V21.5h4.64l-0.773,5H31.5v11H25.5z"
-            opacity=".07"></path>
-          <path fill="#fff"
-            d="M33.365,16H36v-3.754c-0.492-0.064-1.531-0.203-3.495-0.203c-4.101,0-6.505,2.08-6.505,6.819V22h-4v4	h4v11h5V26h3.938l0.618-4H31v-2.465C31,17.661,31.612,16,33.365,16z">
-          </path>
-        </svg>
-        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48"
-          style=" fill:#000000;">
-          <path fill="#03A9F4"
-            d="M42,12.429c-1.323,0.586-2.746,0.977-4.247,1.162c1.526-0.906,2.7-2.351,3.251-4.058c-1.428,0.837-3.01,1.452-4.693,1.776C34.967,9.884,33.05,9,30.926,9c-4.08,0-7.387,3.278-7.387,7.32c0,0.572,0.067,1.129,0.193,1.67c-6.138-0.308-11.582-3.226-15.224-7.654c-0.64,1.082-1,2.349-1,3.686c0,2.541,1.301,4.778,3.285,6.096c-1.211-0.037-2.351-0.374-3.349-0.914c0,0.022,0,0.055,0,0.086c0,3.551,2.547,6.508,5.923,7.181c-0.617,0.169-1.269,0.263-1.941,0.263c-0.477,0-0.942-0.054-1.392-0.135c0.94,2.902,3.667,5.023,6.898,5.086c-2.528,1.96-5.712,3.134-9.174,3.134c-0.598,0-1.183-0.034-1.761-0.104C9.268,36.786,13.152,38,17.321,38c13.585,0,21.017-11.156,21.017-20.834c0-0.317-0.01-0.633-0.025-0.945C39.763,15.197,41.013,13.905,42,12.429">
-          </path>
-        </svg>
-      </div>
+  </article>
+
+  <article class="proj">
+    <div class="meta"><span class="status es">Público · MIT</span><span class="status en">Public · MIT</span><span class="label">Python · datos</span></div>
+    <div>
+      <h3>PipeLine</h3>
+      <p class="es">Pestaña para la barra de Omarchy que muestra precios de mercado: BTC y ETH con color y flecha en la barra, y un panel con minigráficos de 7 días y la antigüedad de cada dato.</p>
+      <p class="en">A tab for the Omarchy bar showing market prices: BTC and ETH with colour and arrow in the bar, and a panel with 7-day sparklines and the age of each data point.</p>
+      <ul class="pts es"><li>Un colector con temporizador de systemd consulta CoinGecko y guarda en SQLite; la barra solo lee de la base, sin bloquearse por la red.</li><li>Respeta los límites del proveedor (pausa ante un 429) y marca como obsoleto el último dato si cae la conexión.</li><li>Solo lectura, sin claves. Cientos de tests, instalador con modo simulación y servicio con sandbox.</li></ul>
+      <ul class="pts en"><li>A systemd-timer collector queries CoinGecko and stores to SQLite; the bar only reads the database, so it never blocks on the network.</li><li>Respects provider limits (backs off on a 429) and flags the last value as stale when offline.</li><li>Read-only, no keys. Hundreds of tests, dry-run installer, sandboxed service.</li></ul>
+      <div class="tags"><span>Python</span><span>SQLite</span><span>systemd</span><span>QML</span><span>CoinGecko API</span></div>
+      <div class="links"><a href="https://github.com/Octa96mz/PipeLine" target="_blank" rel="noopener">GitHub →</a></div>
     </div>
+  </article>
+
+  <article class="proj">
+    <div class="meta"><span class="status es">En desarrollo · repo privado</span><span class="status en">In development · private repo</span><span class="label">Full-stack · IA</span></div>
+    <div>
+      <h3>Turno</h3>
+      <p class="es">SaaS multi-negocio de reservas para restaurantes y locales, pensado para crecer: asistente de IA que responde consultas y gestiona reservas.</p>
+      <p class="en">A multi-tenant booking SaaS for restaurants and local businesses, built to scale: an AI assistant that answers questions and manages bookings.</p>
+      <ul class="pts es"><li>Backend multi-negocio en Node, TypeScript, Fastify, PostgreSQL y Drizzle: cada local tiene sus propios datos aislados por filas (RLS).</li><li>Fase 1 completada: API de reservas con integración continua en verde y versión etiquetada.</li><li>Cada cambio se trabaja en una rama y pasa por revisión adversarial de seguridad (inyección SQL, IDOR, saltos de RLS, condiciones de carrera en el limitador de peticiones) antes de fusionarse.</li><li>Fase 2 en curso: monorepo (API y web), login del propietario, panel en Next.js, widget de chat con IA y verificación telefónica antes de exponer las rutas públicas.</li></ul>
+      <ul class="pts en"><li>Multi-tenant backend in Node, TypeScript, Fastify, PostgreSQL and Drizzle: each venue's data is isolated at row level (RLS).</li><li>Phase 1 complete: bookings API with green CI and a tagged release.</li><li>Every change is built on a branch and goes through adversarial security review (SQL injection, IDOR, RLS bypass, rate-limiter races) before merging.</li><li>Phase 2 under way: monorepo (API and web), owner login, Next.js panel, AI chat widget and phone verification before exposing public routes.</li></ul>
+      <div class="tags"><span>TypeScript</span><span>Fastify</span><span>PostgreSQL</span><span>Drizzle</span><span>Next.js</span><span>LLM</span></div>
+    </div>
+  </article>
+
+  <article class="proj">
+    <div class="meta"><span class="status es">En uso</span><span class="status en">In use</span><span class="label">Automatización</span></div>
+    <div>
+      <h3><span class="es">Recordatorios por WhatsApp con n8n</span><span class="en">WhatsApp reminders with n8n</span></h3>
+      <p class="es">Automatización de recordatorios de citas para negocios locales de sectores con agenda (peluquerías, clínicas, gimnasios), con arquitectura de flujo propia y respuestas asistidas por IA. Funcionando y en uso.</p>
+      <p class="en">Appointment-reminder automation for local appointment-driven businesses (salons, clinics, gyms), with its own workflow architecture and AI-assisted replies. Live and in use.</p>
+      <div class="tags"><span>n8n</span><span>WhatsApp</span><span>Telegram</span><span>LLM</span></div>
+    </div>
+  </article>
+
+  <article class="proj">
+    <div class="meta"><span class="status es">Funcionando</span><span class="status en">Running</span><span class="label">Homelab</span></div>
+    <div>
+      <h3><span class="es">Servidor personal</span><span class="en">Personal server</span></h3>
+      <p class="es">Servicios autoalojados en Docker: Immich como copia privada de fotos y vídeos del iPhone, Caddy como proxy inverso y Tailscale para acceder desde fuera sin abrir puertos. Incluye resolución de cortafuegos (ufw) para la interfaz de Tailscale.</p>
+      <p class="en">Self-hosted services on Docker: Immich as a private photo and video backup for the iPhone, Caddy as reverse proxy and Tailscale for remote access without opening ports. Includes ufw firewall tuning for the Tailscale interface.</p>
+      <div class="tags"><span>Docker Compose</span><span>Tailscale</span><span>Caddy</span><span>Immich</span><span>Linux</span></div>
+    </div>
+  </article>
+</section>
+
+<section id="analitica">
+  <h2><span class="es">Analítica web</span><span class="en">Web analytics</span></h2>
+  <div class="cards">
+    <div class="card"><b>Google Analytics Certification</b><span class="es">2026 · 94 puntos</span><span class="en">2026 · 94 points</span></div>
+    <div class="card"><b>Google Ads Measurement Certification</b><span>Google Skillshop · 2026</span></div>
+    <div class="card"><b><span class="es">Analítica y Marketing Digital</span><span class="en">Analytics and Digital Marketing</span></b><span class="es">30 h · SEPE · 2026</span><span class="en">30 h · SEPE · 2026</span></div>
   </div>
+  <p class="es" style="color:var(--muted);max-width:42rem;margin-top:1.25rem">Trabajo con GA4, Google Tag Manager, medición de conversiones y consentimiento. Mi objetivo es que cada función que desarrollo se pueda medir.</p>
+  <p class="en" style="color:var(--muted);max-width:42rem;margin-top:1.25rem">I work with GA4, Google Tag Manager, conversion measurement and consent. My aim is that every feature I build can be measured.</p>
+</section>
+
+<section id="stack">
+  <h2>Stack</h2>
+  <div class="stack">
+    <div><span class="label"><span class="es">Desarrollo</span><span class="en">Development</span></span><p>JavaScript, TypeScript, React, Next.js, Node, Fastify, Python, Bash</p></div>
+    <div><span class="label"><span class="es">Datos</span><span class="en">Data</span></span><p>PostgreSQL, SQLite, Drizzle, Prisma, Zod, GA4, GTM</p></div>
+    <div><span class="label"><span class="es">Infraestructura</span><span class="en">Infrastructure</span></span><p>Linux (Arch, Hyprland), Docker, Tailscale, Caddy, WireGuard, systemd, GitHub Actions</p></div>
+    <div><span class="label"><span class="es">Automatización e IA</span><span class="en">Automation and AI</span></span><p>n8n, LLM APIs, Claude Code</p></div>
+  </div>
+  <p class="es" style="color:var(--muted);max-width:42rem;margin-top:1.5rem">Trabajo con asistencia de IA (Claude Code) y reviso, pruebo y apruebo cada cambio yo mismo.</p>
+  <p class="en" style="color:var(--muted);max-width:42rem;margin-top:1.5rem">I work with AI assistance (Claude Code) and review, test and approve every change myself.</p>
+</section>
+
+<section id="contacto">
+  <h2><span class="es">Contacto</span><span class="en">Contact</span></h2>
+  <div class="cta">
+    <button class="copy" id="mail" type="button">octa96mz@gmail.com</button>
+    <a class="btn alt" href="https://www.linkedin.com/in/octavio-nicolas-montoya-zanini" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="btn alt" href="https://github.com/Octa96mz" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <p class="label" id="msg" aria-live="polite" style="margin-top:.75rem"></p>
+</section>
+<footer>Octavio Nicolás Montoya Zanini · Barcelona</footer>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement,lang='es';
+  try{lang=localStorage.getItem('lang')||((navigator.language||'es').slice(0,2)==='en'?'en':'es')}catch(e){}
+  function set(l){lang=l;root.setAttribute('data-lang',l);root.lang=l;try{localStorage.setItem('lang',l)}catch(e){}}
+  set(lang);
+  document.getElementById('lang').addEventListener('click',function(){set(lang==='es'?'en':'es')});
+  var mail=document.getElementById('mail'),msg=document.getElementById('msg');
+  mail.addEventListener('click',function(){
+    var t='octa96mz@gmail.com';
+    function ok(){msg.textContent=lang==='es'?'Copiado':'Copied'}
+    try{navigator.clipboard.writeText(t).then(ok,function(){sel()})}catch(e){sel()}
+    function sel(){var r=document.createRange();r.selectNodeContents(mail);var s=getSelection();s.removeAllRanges();s.addRange(r)}
+  });
+})();
+</script>
+
 </body>
-
 </html>
