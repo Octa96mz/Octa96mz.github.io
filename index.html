@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Portfolio de Octavio Montoya Zanini: desarrollo web y analítica web, Barcelona.">
+<meta name="description" content="Octavio Montoya Zanini: marketing digital, desarrollo web y automatización con IA. Barcelona.">
 <title>Octavio Montoya Zanini</title>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap">
 <style>
-/* Layout: single column, wide project rows with a left meta rail; engineering notes as the main voice */
+/* Layout: one column; three numbered-by-role areas, then the circuit that joins them */
 :root{
   --bg:#f3f5f7; --surface:#ffffff; --fg:#14202b; --muted:#566574; --line:#d6dde4;
   --accent:#0b6e6e; --accent-fg:#ffffff; --tag:#e4eef0;
@@ -20,45 +20,61 @@
   --bg:#0f161d; --surface:#16202a; --fg:#e6edf3; --muted:#9aabba; --line:#27343f; --accent:#5ec4c0; --accent-fg:#0f161d; --tag:#1d2c35; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);margin:0;padding-block:0 4rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.wrap{max-width:60rem;margin:0 auto}
+.wrap{max-width:62rem;margin:0 auto}
 a{color:var(--accent)}
 a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 html[data-lang="es"] .en,html[data-lang="en"] .es{display:none!important}
-header.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-block:1.25rem;border-bottom:1px solid var(--line);flex-wrap:wrap}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:.75rem 1.25rem;padding-block:1.1rem;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .brand{font:500 .85rem var(--mono);letter-spacing:.04em}
-nav{display:flex;gap:1.25rem;align-items:center;flex-wrap:wrap;font-size:.9rem}
-nav a{color:var(--muted);text-decoration:none}nav a:hover{color:var(--accent)}
+nav{display:flex;gap:.5rem 1.25rem;align-items:center;flex-wrap:wrap;font-size:.9rem}
+nav a.l{color:var(--muted);text-decoration:none}nav a.l:hover{color:var(--accent)}
 .lang{font:500 .8rem var(--mono);background:none;border:1px solid var(--line);color:var(--fg);padding:.3rem .6rem;border-radius:4px;cursor:pointer}
-.hero{padding-block:4rem 3rem;display:grid;gap:1.25rem}
-.hero h1{font:700 clamp(2.2rem,6vw,3.8rem)/1.05 var(--display);margin:0;text-wrap:balance;letter-spacing:-.02em}
-.hero p{max-width:40rem;font-size:1.1rem;color:var(--muted);margin:0}
-.cta{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.5rem}
 .btn{display:inline-block;padding:.6rem 1.1rem;border-radius:4px;text-decoration:none;font-weight:600;font-size:.95rem;border:1px solid var(--accent)}
 .btn.main{background:var(--accent);color:var(--accent-fg)}
 .btn.alt{color:var(--accent)}
-h2{font:700 1.6rem var(--display);margin:0 0 1.5rem;letter-spacing:-.01em}
+.btn.sm{padding:.3rem .75rem;font-size:.85rem}
+.hero{padding-block:3.5rem 2.5rem;display:grid;gap:1.25rem}
+.hero h1{font:700 clamp(2rem,5.5vw,3.4rem)/1.08 var(--display);margin:0;text-wrap:balance;letter-spacing:-.02em;max-width:46rem}
+.hero p{max-width:44rem;font-size:1.08rem;color:var(--muted);margin:0}
+.cta{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.25rem}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:1rem}
+.facts div{background:var(--surface);padding:.9rem 1rem;display:grid;gap:.15rem}
+.facts b{font:700 1rem var(--display)}
+.facts span{font-size:.85rem;color:var(--muted)}
+h2{font:700 1.6rem var(--display);margin:0 0 .4rem;letter-spacing:-.01em}
+.sub{margin:0 0 1.5rem;color:var(--muted);max-width:44rem}
+h3{font:700 1.1rem var(--display);margin:0 0 .5rem}
 .label{font:500 .75rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 section{padding-block:2.5rem;border-top:1px solid var(--line)}
-.proj{display:grid;grid-template-columns:12rem minmax(0,1fr);gap:1.5rem;padding-block:1.75rem;border-top:1px solid var(--line)}
-.proj:first-of-type{border-top:0;padding-top:0}
-.meta{display:grid;gap:.5rem;align-content:start}
-.status{font:500 .75rem var(--mono);padding:.2rem .5rem;border-radius:3px;background:var(--tag);color:var(--accent);width:fit-content}
-.proj h3{font:700 1.3rem var(--display);margin:0 0 .5rem}
-.proj p{margin:0 0 .75rem;max-width:42rem}
-ul.pts{margin:0 0 .9rem;padding-left:1.1rem;max-width:42rem}ul.pts li{margin-bottom:.3rem}
-.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));gap:1.5rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:1.1rem;min-width:0}
+.card p{margin:0 0 .6rem;font-size:.95rem}
+ul.pts{margin:0;padding-left:1.1rem;font-size:.95rem}ul.pts li{margin-bottom:.35rem}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem}
 .tags span{font:400 .75rem var(--mono);background:var(--tag);padding:.15rem .5rem;border-radius:3px}
-.links{display:flex;gap:1rem;flex-wrap:wrap;font-size:.9rem;font-weight:500}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1rem}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:1.1rem}
-.card b{display:block;font-family:var(--display);margin-bottom:.25rem}
-.card span{color:var(--muted);font-size:.9rem}
-.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1.25rem}
-.stack div{display:grid;gap:.35rem}
-.stack p{margin:0;font-size:.95rem}
+.status{font:500 .72rem var(--mono);padding:.15rem .45rem;border-radius:3px;background:var(--tag);color:var(--accent);margin-left:.4rem;vertical-align:middle}
+.proj{display:grid;grid-template-columns:11rem minmax(0,1fr);gap:1.25rem;padding-block:1.4rem;border-top:1px solid var(--line)}
+.proj h4{font:700 1.15rem var(--display);margin:0 0 .4rem}
+.proj p{margin:0 0 .6rem;max-width:42rem}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(12.5rem,1fr));gap:.75rem;margin:0 0 1.5rem;padding:0;list-style:none}
+.flow li{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:1rem;position:relative}
+.flow b{display:block;font:700 1rem var(--display);margin-bottom:.25rem}
+.flow span{font-size:.9rem;color:var(--muted)}
+.flow .k{font:500 .72rem var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:.3rem}
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.25rem}
+.stack p{margin:.3rem 0 0;font-size:.95rem}
 .copy{font:400 .95rem var(--mono);background:var(--surface);border:1px solid var(--line);padding:.5rem .8rem;border-radius:4px;cursor:pointer;color:var(--fg)}
 footer{padding-top:2rem;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
-@media(max-width:640px){.proj{grid-template-columns:1fr;gap:.75rem}.hero{padding-block:2.5rem 2rem}}
+.practical{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:.75rem 1.5rem;margin-top:.5rem;padding-top:1rem;border-top:1px solid var(--line)}
+.practical div{display:grid;gap:.1rem}
+.practical dt{font:500 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.practical dd{margin:0;font-weight:500}
+.linklike{background:none;border:0;padding:0;font:inherit;color:var(--accent);text-decoration:underline;cursor:pointer}
+.consent{position:fixed;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:40rem;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem 1.1rem;box-shadow:0 8px 30px rgba(0,0,0,.18);z-index:20;display:grid;gap:.75rem}
+.consent p{margin:0;font-size:.9rem}
+.consent .row{display:flex;gap:.6rem;flex-wrap:wrap}
+.consent button{font:600 .9rem var(--body);padding:.5rem 1rem;border-radius:4px;border:1px solid var(--accent);cursor:pointer;background:none;color:var(--accent)}
+@media(max-width:640px){.proj{grid-template-columns:1fr;gap:.5rem}.hero{padding-block:2.25rem 1.5rem}}
 @media(prefers-reduced-motion:no-preference){a,.btn{transition:color .15s,background .15s}}
 </style>
 
@@ -68,120 +84,184 @@ footer{padding-top:2rem;border-top:1px solid var(--line);color:var(--muted);font
 <header class="top">
   <span class="brand">octa96mz</span>
   <nav>
-    <a href="#proyectos"><span class="es">Proyectos</span><span class="en">Projects</span></a>
-    <a href="#analitica"><span class="es">Analítica</span><span class="en">Analytics</span></a>
-    <a href="#stack">Stack</a>
-    <a href="#contacto"><span class="es">Contacto</span><span class="en">Contact</span></a>
+    <a class="l" href="#marketing">Marketing</a>
+    <a class="l" href="#desarrollo"><span class="es">Desarrollo web</span><span class="en">Web development</span></a>
+    <a class="l" href="#automatizacion"><span class="es">Automatización</span><span class="en">Automation</span></a>
+    <a class="l" href="#conexion"><span class="es">Cómo se conectan</span><span class="en">How they connect</span></a>
+    <a class="btn main sm" href="CV_Octavio_Montoya_Zanini.pdf" download><span class="es">Descargar CV</span><span class="en">Download CV</span></a>
     <button class="lang" id="lang" type="button" aria-label="Cambiar idioma / Switch language">ES / EN</button>
   </nav>
 </header>
 
 <div class="hero">
   <span class="label">Barcelona</span>
-  <h1><span class="es">Desarrollo web y analítica web.</span><span class="en">Web development and web analytics.</span></h1>
-  <p class="es">Soy Octavio Montoya Zanini. Construyo herramientas reales en JavaScript, TypeScript y Linux, y mido lo que funciona con Google Analytics y Tag Manager. Busco mi primer puesto como desarrollador, en un equipo donde pueda unir producto y datos.</p>
-  <p class="en">I'm Octavio Montoya Zanini. I build real tools in JavaScript, TypeScript and Linux, and measure what works with Google Analytics and Tag Manager. I'm looking for my first developer role, on a team where product and data meet.</p>
+  <h1><span class="es">Marketing digital, desarrollo web y automatización con IA.</span><span class="en">Digital marketing, web development and AI automation.</span></h1>
+  <p class="es">Soy Octavio Montoya Zanini. Gestiono redes sociales como freelance desde 2015, soy Técnico Universitario en Programación (UTN) y trabajé como programador web de 2020 a 2024. Uso las tres áreas en un mismo circuito: publico y mido contenido, desarrollo las páginas donde se convierte y automatizo las tareas repetitivas con n8n y modelos de IA.</p>
+  <p class="en">I'm Octavio Montoya Zanini. I've managed social media as a freelancer since 2015, I hold a university degree in programming (UTN) and worked as a web developer from 2020 to 2024. I use the three areas in one circuit: I publish and measure content, build the pages where it converts, and automate repetitive tasks with n8n and AI models.</p>
   <div class="cta">
-    <a class="btn main" href="https://github.com/Octa96mz" target="_blank" rel="noopener">GitHub</a>
+    <a class="btn main" href="CV_Octavio_Montoya_Zanini.pdf" download><span class="es">Descargar CV (PDF)</span><span class="en">Download CV (PDF)</span></a>
     <a class="btn alt" href="https://www.linkedin.com/in/octavio-nicolas-montoya-zanini" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="btn alt" href="https://github.com/Octa96mz" target="_blank" rel="noopener">GitHub</a>
   </div>
+  <div class="facts">
+    <div><b><span class="es">Desde 2015</span><span class="en">Since 2015</span></b><span class="es">Community management freelance</span><span class="en">Freelance community management</span></div>
+    <div><b>2020 – 2024</b><span class="es">Programador web en Lazo</span><span class="en">Web developer at Lazo</span></div>
+    <div><b>Google Analytics</b><span class="es">Certificación 2026, 94 puntos</span><span class="en">2026 certification, 94 points</span></div>
+    <div><b>n8n</b><span class="es">Automatización en uso real</span><span class="en">Automation in real use</span></div>
+  </div>
+  <dl class="practical">
+    <div><dt><span class="es">Disponibilidad</span><span class="en">Availability</span></dt><dd><span class="es">Full time</span><span class="en">Full time</span></dd></div>
+    <div><dt><span class="es">Modalidad</span><span class="en">Work mode</span></dt><dd><span class="es">Remoto o híbrido</span><span class="en">Remote or hybrid</span></dd></div>
+    <div><dt><span class="es">Idiomas</span><span class="en">Languages</span></dt><dd><span class="es">Español nativo, inglés avanzado</span><span class="en">Native Spanish, advanced English</span></dd></div>
+    <div><dt><span class="es">Ciudad</span><span class="en">Location</span></dt><dd>Barcelona</dd></div>
+  </dl>
 </div>
 
-<section id="proyectos">
-  <h2><span class="es">Proyectos</span><span class="en">Projects</span></h2>
+<!-- 1. MARKETING -->
+<section id="marketing">
+  <span class="label"><span class="es">Área 1</span><span class="en">Area 1</span></span>
+  <h2><span class="es">Marketing digital y analítica</span><span class="en">Digital marketing and analytics</span></h2>
+  <p class="sub es">Gestión de cuentas de bares, una hamburguesería y un local de gaming y realidad virtual. Las cuentas son de Argentina, y también trabajé con locales de gastronomía en España.</p>
+  <p class="sub en">Management of accounts for bars, a burger restaurant and a gaming and virtual reality venue. The accounts are based in Argentina, and I have also worked with hospitality venues in Spain.</p>
+  <div class="grid2">
+    <div class="card">
+      <h3><span class="es">Qué hice como community manager</span><span class="en">What I did as community manager</span></h3>
+      <ul class="pts es"><li>Publicación de contenido con calendario editorial.</li><li>Crecimiento orgánico de seguidores, sin publicidad de pago.</li><li>Ideas y gestión de sorteos y concursos.</li><li>Interacción con la comunidad y contacto con nuevos seguidores.</li><li>Foto y vídeo para redes, con edición en Premiere Pro, Kdenlive, CapCut y Canva.</li><li>Lectura de métricas de reels: alcance, reproducciones y seguidores nuevos.</li></ul>
+      <ul class="pts en"><li>Content publishing with an editorial calendar.</li><li>Organic follower growth, without paid advertising.</li><li>Giveaway and contest ideas and management.</li><li>Community interaction and outreach to new followers.</li><li>Photo and video for social media, edited in Premiere Pro, Kdenlive, CapCut and Canva.</li><li>Reel metrics: reach, plays and new followers.</li></ul>
+    </div>
+    <div class="card">
+      <h3><span class="es">Resultado</span><span class="en">Outcome</span></h3>
+      <p class="es">En las cuatro cuentas el número de seguidores creció de forma orgánica durante mi gestión. En el local de realidad virtual la audiencia se multiplicó varias veces, con reels que superaron las decenas de miles de reproducciones.</p>
+      <p class="en">In all four accounts the follower count grew organically during my management. At the virtual reality venue the audience multiplied several times over, with reels that passed tens of thousands of views.</p>
+      <h3 style="margin-top:1rem"><span class="es">Analítica y medición</span><span class="en">Analytics and measurement</span></h3>
+      <ul class="pts es"><li>Google Analytics Certification, 94 puntos (2026). <a href="https://www.credential.net/0082e412-a02c-415b-93e6-28a995891db4" target="_blank" rel="noopener">Verificar</a></li><li>Google Ads Measurement Certification (2026). <a href="https://www.credential.net/2a5fa81d-8345-4d2c-b1ad-27bacb4cf654" target="_blank" rel="noopener">Verificar</a></li><li>Analítica y Marketing Digital, 30 h, SEPE (2026).</li><li>Uso GA4 y Google Tag Manager para eventos, conversiones y consentimiento.</li></ul>
+      <ul class="pts en"><li>Google Analytics Certification, 94 points (2026). <a href="https://www.credential.net/0082e412-a02c-415b-93e6-28a995891db4" target="_blank" rel="noopener">Verify</a></li><li>Google Ads Measurement Certification (2026). <a href="https://www.credential.net/2a5fa81d-8345-4d2c-b1ad-27bacb4cf654" target="_blank" rel="noopener">Verify</a></li><li>Analytics and Digital Marketing, 30 h, SEPE (2026).</li><li>I use GA4 and Google Tag Manager for events, conversions and consent.</li></ul>
+    </div>
+  </div>
+  <div class="tags"><span>Instagram</span><span>Reels</span><span>Google Analytics 4</span><span>Google Tag Manager</span><span>Premiere Pro</span><span>Kdenlive</span><span>CapCut</span><span>Canva</span></div>
+  <p class="label" style="margin-top:1rem"><span class="es">Formación: Community Manager (Municipalidad de Córdoba 2014, Platzi 2026)</span><span class="en">Training: Community Manager (Municipalidad de Córdoba 2014, Platzi 2026)</span></p>
+</section>
+
+<!-- 2. DESARROLLO WEB -->
+<section id="desarrollo">
+  <span class="label"><span class="es">Área 2</span><span class="en">Area 2</span></span>
+  <h2><span class="es">Desarrollo web</span><span class="en">Web development</span></h2>
+  <div class="grid2" style="margin-bottom:1.25rem">
+    <div class="card">
+      <h3><span class="es">Experiencia</span><span class="en">Experience</span></h3>
+      <p class="es"><b>Programador, Lazo (2020 – junio 2024).</b> Empresa de desarrollo de software; trabajé en el área web.</p>
+      <p class="en"><b>Developer, Lazo (2020 – June 2024).</b> A software development company; I worked in the web area.</p>
+      <ul class="pts es"><li>Desarrollo y mantenimiento de aplicaciones web con JavaScript y React.</li><li>Bases de datos SQL y PostgreSQL.</li><li>Trabajo en equipo con control de versiones en Git.</li><li>Resolución de incidencias y mejora de funcionalidades existentes.</li></ul>
+      <ul class="pts en"><li>Development and maintenance of web applications with JavaScript and React.</li><li>SQL and PostgreSQL databases.</li><li>Team work with Git version control.</li><li>Issue resolution and improvement of existing features.</li></ul>
+    </div>
+    <div class="card">
+      <h3><span class="es">Formación</span><span class="en">Education</span></h3>
+      <ul class="pts es"><li>Técnico Universitario en Programación, UTN (2020).</li><li>Ingreso aprobado a Ingeniería en Sistemas, UTN Córdoba.</li><li>FullStack con JavaScript, Platzi (2025).</li></ul>
+      <ul class="pts en"><li>University Technician in Programming, UTN (2020).</li><li>Passed admission to Systems Engineering, UTN Córdoba.</li><li>Full-Stack JavaScript, Platzi (2025).</li></ul>
+      <div class="tags"><span>JavaScript</span><span>TypeScript</span><span>React</span><span>Next.js</span><span>Node</span><span>PostgreSQL</span><span>Git</span></div>
+    </div>
+  </div>
 
   <article class="proj">
-    <div class="meta"><span class="status es">Público · MIT</span><span class="status en">Public · MIT</span><span class="label">Linux · seguridad</span></div>
+    <div><span class="label es">Proyecto propio</span><span class="label en">Own project</span><br><span class="status es">Repo privado</span><span class="status en">Private repo</span></div>
     <div>
-      <h3>wifi-publica</h3>
-      <p class="es">Herramienta de endurecimiento para redes wifi públicas en CachyOS y Omarchy. Combina un kill switch con nftables y un túnel WireGuard con varios servidores de Proton VPN Free, y añade módulos para la barra del escritorio.</p>
-      <p class="en">A hardening tool for public wifi on CachyOS and Omarchy. It combines an nftables kill switch with a WireGuard tunnel across several Proton VPN Free servers, plus desktop bar modules.</p>
-      <ul class="pts es"><li>Suite de 109 tests, CI en GitHub Actions con shellcheck y escaneo de secretos con gitleaks.</li><li>Varias rondas de revisión de seguridad: separación de privilegios, condiciones de carrera y errores de interpretación de políticas nftables.</li><li>Procedimiento de rescate documentado y verificado por un test que impide que vuelva a romperse.</li></ul>
-      <ul class="pts en"><li>109-test suite, GitHub Actions CI with shellcheck and gitleaks secret scanning.</li><li>Several security review rounds: privilege separation, race conditions and nftables policy-parsing bugs.</li><li>A documented recovery procedure, guarded by a test so it cannot regress.</li></ul>
-      <div class="tags"><span>Bash</span><span>nftables</span><span>WireGuard</span><span>QML</span><span>CI</span></div>
-      <div class="links"><a href="https://github.com/Octa96mz/wifi-publica" target="_blank" rel="noopener">GitHub →</a></div>
+      <h4>Turno</h4>
+      <p class="es">SaaS de reservas para restaurantes y locales, con asistente de IA para consultas y reservas. Backend multi-negocio en Node, TypeScript, Fastify, PostgreSQL y Drizzle, con los datos de cada local aislados a nivel de fila. Cada cambio se revisa en seguridad (inyección SQL, IDOR, aislamiento) antes de fusionarse. En curso: panel en Next.js, login del propietario y chat con IA.</p>
+      <p class="en">Booking SaaS for restaurants and venues, with an AI assistant for questions and bookings. Multi-tenant backend in Node, TypeScript, Fastify, PostgreSQL and Drizzle, with each venue's data isolated at row level. Every change gets a security review (SQL injection, IDOR, isolation) before merging. In progress: Next.js panel, owner login and AI chat.</p>
     </div>
   </article>
-
   <article class="proj">
-    <div class="meta"><span class="status es">Público · MIT</span><span class="status en">Public · MIT</span><span class="label">Python · datos</span></div>
+    <div><span class="label es">Proyecto propio</span><span class="label en">Own project</span><br><span class="status">MIT</span></div>
     <div>
-      <h3>PipeLine</h3>
-      <p class="es">Pestaña para la barra de Omarchy que muestra precios de mercado: BTC y ETH con color y flecha en la barra, y un panel con minigráficos de 7 días y la antigüedad de cada dato.</p>
-      <p class="en">A tab for the Omarchy bar showing market prices: BTC and ETH with colour and arrow in the bar, and a panel with 7-day sparklines and the age of each data point.</p>
-      <ul class="pts es"><li>Un colector con temporizador de systemd consulta CoinGecko y guarda en SQLite; la barra solo lee de la base, sin bloquearse por la red.</li><li>Respeta los límites del proveedor (pausa ante un 429) y marca como obsoleto el último dato si cae la conexión.</li><li>Solo lectura, sin claves. Cientos de tests, instalador con modo simulación y servicio con sandbox.</li></ul>
-      <ul class="pts en"><li>A systemd-timer collector queries CoinGecko and stores to SQLite; the bar only reads the database, so it never blocks on the network.</li><li>Respects provider limits (backs off on a 429) and flags the last value as stale when offline.</li><li>Read-only, no keys. Hundreds of tests, dry-run installer, sandboxed service.</li></ul>
-      <div class="tags"><span>Python</span><span>SQLite</span><span>systemd</span><span>QML</span><span>CoinGecko API</span></div>
-      <div class="links"><a href="https://github.com/Octa96mz/PipeLine" target="_blank" rel="noopener">GitHub →</a></div>
+      <h4>wifi-publica</h4>
+      <p class="es">Herramienta para proteger el uso de wifi pública en Linux: kill switch con nftables y túnel WireGuard con varios servidores. 109 tests, CI en GitHub Actions y escaneo de secretos con gitleaks. <a href="https://github.com/Octa96mz/wifi-publica" target="_blank" rel="noopener">GitHub →</a></p>
+      <p class="en">A tool to protect public wifi use on Linux: nftables kill switch and a WireGuard tunnel across several servers. 109 tests, GitHub Actions CI and gitleaks secret scanning. <a href="https://github.com/Octa96mz/wifi-publica" target="_blank" rel="noopener">GitHub →</a></p>
     </div>
   </article>
-
   <article class="proj">
-    <div class="meta"><span class="status es">En desarrollo · repo privado</span><span class="status en">In development · private repo</span><span class="label">Full-stack · IA</span></div>
+    <div><span class="label es">Proyecto propio</span><span class="label en">Own project</span><br><span class="status">MIT</span></div>
     <div>
-      <h3>Turno</h3>
-      <p class="es">SaaS multi-negocio de reservas para restaurantes y locales, pensado para crecer: asistente de IA que responde consultas y gestiona reservas.</p>
-      <p class="en">A multi-tenant booking SaaS for restaurants and local businesses, built to scale: an AI assistant that answers questions and manages bookings.</p>
-      <ul class="pts es"><li>Backend multi-negocio en Node, TypeScript, Fastify, PostgreSQL y Drizzle: cada local tiene sus propios datos aislados por filas (RLS).</li><li>Fase 1 completada: API de reservas con integración continua en verde y versión etiquetada.</li><li>Cada cambio se trabaja en una rama y pasa por revisión adversarial de seguridad (inyección SQL, IDOR, saltos de RLS, condiciones de carrera en el limitador de peticiones) antes de fusionarse.</li><li>Fase 2 en curso: monorepo (API y web), login del propietario, panel en Next.js, widget de chat con IA y verificación telefónica antes de exponer las rutas públicas.</li></ul>
-      <ul class="pts en"><li>Multi-tenant backend in Node, TypeScript, Fastify, PostgreSQL and Drizzle: each venue's data is isolated at row level (RLS).</li><li>Phase 1 complete: bookings API with green CI and a tagged release.</li><li>Every change is built on a branch and goes through adversarial security review (SQL injection, IDOR, RLS bypass, rate-limiter races) before merging.</li><li>Phase 2 under way: monorepo (API and web), owner login, Next.js panel, AI chat widget and phone verification before exposing public routes.</li></ul>
-      <div class="tags"><span>TypeScript</span><span>Fastify</span><span>PostgreSQL</span><span>Drizzle</span><span>Next.js</span><span>LLM</span></div>
-    </div>
-  </article>
-
-  <article class="proj">
-    <div class="meta"><span class="status es">En uso</span><span class="status en">In use</span><span class="label">Automatización</span></div>
-    <div>
-      <h3><span class="es">Recordatorios por WhatsApp con n8n</span><span class="en">WhatsApp reminders with n8n</span></h3>
-      <p class="es">Automatización de recordatorios de citas para negocios locales de sectores con agenda (peluquerías, clínicas, gimnasios), con arquitectura de flujo propia y respuestas asistidas por IA. Funcionando y en uso.</p>
-      <p class="en">Appointment-reminder automation for local appointment-driven businesses (salons, clinics, gyms), with its own workflow architecture and AI-assisted replies. Live and in use.</p>
-      <div class="tags"><span>n8n</span><span>WhatsApp</span><span>Telegram</span><span>LLM</span></div>
-    </div>
-  </article>
-
-  <article class="proj">
-    <div class="meta"><span class="status es">Funcionando</span><span class="status en">Running</span><span class="label">Homelab</span></div>
-    <div>
-      <h3><span class="es">Servidor personal</span><span class="en">Personal server</span></h3>
-      <p class="es">Servicios autoalojados en Docker: Immich como copia privada de fotos y vídeos del iPhone, Caddy como proxy inverso y Tailscale para acceder desde fuera sin abrir puertos. Incluye resolución de cortafuegos (ufw) para la interfaz de Tailscale.</p>
-      <p class="en">Self-hosted services on Docker: Immich as a private photo and video backup for the iPhone, Caddy as reverse proxy and Tailscale for remote access without opening ports. Includes ufw firewall tuning for the Tailscale interface.</p>
-      <div class="tags"><span>Docker Compose</span><span>Tailscale</span><span>Caddy</span><span>Immich</span><span>Linux</span></div>
+      <h4>PipeLine</h4>
+      <p class="es">Panel de precios de mercado para la barra del escritorio. Un colector con temporizador consulta una API pública, guarda en SQLite y la interfaz solo lee de la base. Respeta los límites del proveedor y marca los datos obsoletos. <a href="https://github.com/Octa96mz/PipeLine" target="_blank" rel="noopener">GitHub →</a></p>
+      <p class="en">A market-price panel for the desktop bar. A timer-driven collector queries a public API and stores to SQLite; the interface only reads the database. It respects provider limits and flags stale data. <a href="https://github.com/Octa96mz/PipeLine" target="_blank" rel="noopener">GitHub →</a></p>
     </div>
   </article>
 </section>
 
-<section id="analitica">
-  <h2><span class="es">Analítica web</span><span class="en">Web analytics</span></h2>
-  <div class="cards">
-    <div class="card"><b>Google Analytics Certification</b><span class="es">2026 · 94 puntos</span><span class="en">2026 · 94 points</span></div>
-    <div class="card"><b>Google Ads Measurement Certification</b><span>Google Skillshop · 2026</span></div>
-    <div class="card"><b><span class="es">Analítica y Marketing Digital</span><span class="en">Analytics and Digital Marketing</span></b><span class="es">30 h · SEPE · 2026</span><span class="en">30 h · SEPE · 2026</span></div>
+<!-- 3. AUTOMATIZACION -->
+<section id="automatizacion">
+  <span class="label"><span class="es">Área 3</span><span class="en">Area 3</span></span>
+  <h2><span class="es">Automatización e IA</span><span class="en">Automation and AI</span></h2>
+  <div class="grid2">
+    <div class="card">
+      <h3><span class="es">Recordatorios de citas por WhatsApp</span><span class="en">WhatsApp appointment reminders</span><span class="status es">En uso</span><span class="status en">In use</span></h3>
+      <p class="es">Flujo en n8n para negocios con agenda (peluquerías, clínicas, gimnasios) que envía el recordatorio de la cita por WhatsApp antes de la hora. Incluye el diseño del flujo completo.</p>
+      <p class="en">An n8n workflow for appointment-based businesses (salons, clinics, gyms) that sends the appointment reminder by WhatsApp ahead of time. Includes the full workflow design.</p>
+    </div>
+    <div class="card">
+      <h3><span class="es">Respuestas con IA en mensajería</span><span class="en">AI replies in messaging</span><span class="status es">Prototipo</span><span class="status en">Prototype</span></h3>
+      <p class="es">Prototipo de respuestas generadas por un modelo de IA para consultas por Telegram y WhatsApp.</p>
+      <p class="en">Prototype of replies generated by an AI model for Telegram and WhatsApp queries.</p>
+    </div>
+    <div class="card">
+      <h3><span class="es">Flujo de fotos para contenido</span><span class="en">Photo workflow for content</span></h3>
+      <p class="es">Las fotos subidas a una carpeta de Google Drive se descargan, se normalizan con exiftool y se guardan en la carpeta de cada cliente para su edición.</p>
+      <p class="en">Photos uploaded to a Google Drive folder are downloaded, normalised with exiftool and saved to each client's folder for editing.</p>
+    </div>
+    <div class="card">
+      <h3><span class="es">Formación en IA</span><span class="en">AI training</span></h3>
+      <ul class="pts es"><li>Automatización con n8n, Platzi (2026).</li><li>Jornadas de IA, Racks Academy (2026).</li><li>Curso de Claude (2026).</li><li>Desarrollo con asistencia de Claude Code; reviso y pruebo cada cambio.</li></ul>
+      <ul class="pts en"><li>n8n Automation, Platzi (2026).</li><li>AI conference series, Racks Academy (2026).</li><li>Claude course (2026).</li><li>Development assisted by Claude Code; I review and test every change.</li></ul>
+    </div>
   </div>
-  <p class="es" style="color:var(--muted);max-width:42rem;margin-top:1.25rem">Trabajo con GA4, Google Tag Manager, medición de conversiones y consentimiento. Mi objetivo es que cada función que desarrollo se pueda medir.</p>
-  <p class="en" style="color:var(--muted);max-width:42rem;margin-top:1.25rem">I work with GA4, Google Tag Manager, conversion measurement and consent. My aim is that every feature I build can be measured.</p>
+  <div class="tags"><span>n8n</span><span>WhatsApp</span><span>Telegram</span><span>LLM APIs</span><span>Google Drive</span><span>Docker</span></div>
+</section>
+
+<!-- 4. CONEXION -->
+<section id="conexion">
+  <h2><span class="es">Cómo se conectan las tres áreas</span><span class="en">How the three areas connect</span></h2>
+  <p class="sub es">Un negocio local necesita captar clientes, saber qué funciona, recibir reservas y no perder citas. Cada área cubre un paso.</p>
+  <p class="sub en">A local business needs to attract customers, know what works, receive bookings and avoid missed appointments. Each area covers one step.</p>
+  <ol class="flow">
+    <li><span class="k es">1 · Marketing</span><span class="k en">1 · Marketing</span><b><span class="es">Atraer</span><span class="en">Attract</span></b><span class="es">Contenido y comunidad en redes que llevan gente al local.</span><span class="en">Content and community on social media that bring people to the venue.</span></li>
+    <li><span class="k es">2 · Analítica</span><span class="k en">2 · Analytics</span><b><span class="es">Medir</span><span class="en">Measure</span></b><span class="es">Eventos y conversiones en GA4 para saber qué publicación trae reservas.</span><span class="en">Events and conversions in GA4 to see which post brings bookings.</span></li>
+    <li><span class="k es">3 · Desarrollo</span><span class="k en">3 · Development</span><b><span class="es">Convertir</span><span class="en">Convert</span></b><span class="es">Una web o un sistema de reservas propio donde el cliente reserva.</span><span class="en">A website or booking system where the customer books.</span></li>
+    <li><span class="k es">4 · Automatización</span><span class="k en">4 · Automation</span><b><span class="es">Retener</span><span class="en">Retain</span></b><span class="es">Recordatorios por WhatsApp y respuestas con IA sin trabajo manual.</span><span class="en">WhatsApp reminders and AI replies without manual work.</span></li>
+  </ol>
+  <p class="es" style="max-width:44rem;margin:0">Turno y los recordatorios con n8n cubren los pasos 3 y 4 para el mismo tipo de negocio con el que trabajo en redes.</p>
+  <p class="en" style="max-width:44rem;margin:0">Turno and the n8n reminders cover steps 3 and 4 for the same kind of business I work with on social media.</p>
 </section>
 
 <section id="stack">
   <h2>Stack</h2>
   <div class="stack">
-    <div><span class="label"><span class="es">Desarrollo</span><span class="en">Development</span></span><p>JavaScript, TypeScript, React, Next.js, Node, Fastify, Python, Bash</p></div>
-    <div><span class="label"><span class="es">Datos</span><span class="en">Data</span></span><p>PostgreSQL, SQLite, Drizzle, Prisma, Zod, GA4, GTM</p></div>
-    <div><span class="label"><span class="es">Infraestructura</span><span class="en">Infrastructure</span></span><p>Linux (Arch, Hyprland), Docker, Tailscale, Caddy, WireGuard, systemd, GitHub Actions</p></div>
-    <div><span class="label"><span class="es">Automatización e IA</span><span class="en">Automation and AI</span></span><p>n8n, LLM APIs, Claude Code</p></div>
+    <div><span class="label"><span class="es">Marketing y contenido</span><span class="en">Marketing and content</span></span><p>Community management, calendario editorial, Instagram, Premiere Pro, Kdenlive, CapCut, Canva</p></div>
+    <div><span class="label"><span class="es">Analítica</span><span class="en">Analytics</span></span><p>Google Analytics 4, Google Tag Manager, Google Ads Measurement</p></div>
+    <div><span class="label"><span class="es">Desarrollo</span><span class="en">Development</span></span><p>JavaScript, TypeScript, React, Next.js, Node, PostgreSQL, Git</p></div>
+    <div><span class="label"><span class="es">Automatización e IA</span><span class="en">Automation and AI</span></span><p>n8n, LLM APIs, Claude Code, Docker, Linux</p></div>
   </div>
-  <p class="es" style="color:var(--muted);max-width:42rem;margin-top:1.5rem">Trabajo con asistencia de IA (Claude Code) y reviso, pruebo y apruebo cada cambio yo mismo.</p>
-  <p class="en" style="color:var(--muted);max-width:42rem;margin-top:1.5rem">I work with AI assistance (Claude Code) and review, test and approve every change myself.</p>
 </section>
 
 <section id="contacto">
   <h2><span class="es">Contacto</span><span class="en">Contact</span></h2>
   <div class="cta">
-    <button class="copy" id="mail" type="button">octa96mz@gmail.com</button>
+    <a class="btn main" href="CV_Octavio_Montoya_Zanini.pdf" download><span class="es">Descargar CV (PDF)</span><span class="en">Download CV (PDF)</span></a>
     <a class="btn alt" href="https://www.linkedin.com/in/octavio-nicolas-montoya-zanini" target="_blank" rel="noopener">LinkedIn</a>
     <a class="btn alt" href="https://github.com/Octa96mz" target="_blank" rel="noopener">GitHub</a>
+    <button class="copy" id="mail" type="button">octa96mz@gmail.com</button>
   </div>
   <p class="label" id="msg" aria-live="polite" style="margin-top:.75rem"></p>
 </section>
-<footer>Octavio Nicolás Montoya Zanini · Barcelona</footer>
+<footer>Octavio Nicolás Montoya Zanini · Barcelona · <button class="linklike" id="prefs" type="button" hidden><span class="es">Preferencias de cookies</span><span class="en">Cookie preferences</span></button></footer>
+</div>
+
+<div class="consent" id="consent" role="dialog" aria-label="Cookies" hidden>
+  <p class="es">Uso Google Analytics para saber qué secciones se leen y cuántas veces se descarga el CV. Solo se activa si lo aceptás, y no se guarda tu identidad.</p>
+  <p class="en">I use Google Analytics to see which sections are read and how often the CV is downloaded. It only runs if you accept, and your identity is not stored.</p>
+  <div class="row">
+    <button type="button" id="c-yes"><span class="es">Aceptar</span><span class="en">Accept</span></button>
+    <button type="button" id="c-no"><span class="es">Rechazar</span><span class="en">Reject</span></button>
+  </div>
 </div>
 
 <script>
@@ -195,9 +275,57 @@ footer{padding-top:2rem;border-top:1px solid var(--line);color:var(--muted);font
   mail.addEventListener('click',function(){
     var t='octa96mz@gmail.com';
     function ok(){msg.textContent=lang==='es'?'Copiado':'Copied'}
-    try{navigator.clipboard.writeText(t).then(ok,function(){sel()})}catch(e){sel()}
     function sel(){var r=document.createRange();r.selectNodeContents(mail);var s=getSelection();s.removeAllRanges();s.addRange(r)}
+    try{navigator.clipboard.writeText(t).then(ok,sel)}catch(e){sel()}
+    track('contact_click',{method:'email'});
   });
+
+  /* Analytics (GA4) con consentimiento. Pegar el ID de medición en GA_ID. */
+  var GA_ID='G-XXXXXXXXXX';
+  var enabled=/^G-[A-Z0-9]{6,}$/.test(GA_ID)&&GA_ID!=='G-XXXXXXXXXX';
+  var allowed=false,loaded=false;
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments)}
+  function store(v){try{if(v===undefined)return localStorage.getItem('consent');localStorage.setItem('consent',v)}catch(e){}return null}
+  function track(name,params){if(enabled&&allowed&&loaded){gtag('event',name,params||{})}}
+  function grant(){
+    allowed=true;
+    gtag('consent','update',{analytics_storage:'granted'});
+    if(loaded)return;
+    loaded=true;
+    var sc=document.createElement('script');sc.async=true;sc.src='https://www.googletagmanager.com/gtag/js?id='+GA_ID;
+    document.head.appendChild(sc);
+    gtag('js',new Date());gtag('config',GA_ID);
+    watchSections();
+  }
+  function deny(){allowed=false;gtag('consent','update',{analytics_storage:'denied'})}
+  var banner=document.getElementById('consent'),prefs=document.getElementById('prefs');
+  function watchSections(){
+    if(!('IntersectionObserver' in window))return;
+    var seen={};
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting&&!seen[e.target.id]){seen[e.target.id]=1;track('section_view',{section:e.target.id})}
+    })},{threshold:.35});
+    ['marketing','desarrollo','automatizacion','conexion'].forEach(function(id){var n=document.getElementById(id);if(n)io.observe(n)});
+  }
+  if(enabled){
+    gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
+    prefs.hidden=false;
+    var c=store();
+    if(c==='granted')grant();else if(c!=='denied')banner.hidden=false;
+    document.getElementById('c-yes').addEventListener('click',function(){store('granted');banner.hidden=true;grant()});
+    document.getElementById('c-no').addEventListener('click',function(){store('denied');banner.hidden=true;deny()});
+    prefs.addEventListener('click',function(){banner.hidden=false});
+  }
+  document.addEventListener('click',function(ev){
+    var a=ev.target.closest&&ev.target.closest('a');if(!a)return;
+    var h=a.getAttribute('href')||'',sec=a.closest('section'),where=sec?sec.id:(a.closest('header')?'menu':'inicio');
+    if(/\.pdf$/i.test(h)){track('cv_download',{file_name:h,location:where});return}
+    if(h.indexOf('linkedin.com')>-1){track('contact_click',{method:'linkedin',location:where});return}
+    if(/github\.com\/Octa96mz\/[^\/]+/.test(h)){track('project_click',{project:h.split('/').pop()});return}
+    if(h.indexOf('github.com/Octa96mz')>-1){track('contact_click',{method:'github',location:where})}
+  });
+  document.getElementById('lang').addEventListener('click',function(){track('language_change',{language:lang})});
 })();
 </script>
 
