@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Informe de mercados y riesgo con datos históricos públicos: S&P 500, Nasdaq, bitcoin, oro y EUR/USD.">
+<title>Mercados y riesgo | Octavio Montoya Zanini</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+:root{--bg:#f3f5f7;--surface:#ffffff;--fg:#14202b;--muted:#566574;--line:#d6dde4;--accent:#0b6e6e;--display:'Space Grotesk',system-ui,sans-serif;--body:'Inter',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0f161d;--surface:#16202a;--fg:#e6edf3;--muted:#9aabba;--line:#27343f;--accent:#5ec4c0;color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);margin:0;padding-block:0 4rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--accent)}
+
+:root{--color-fg:var(--fg);--color-fg-muted:var(--muted);--color-border-line:var(--line);--color-panel:var(--surface);--color-ok:#2a8a5a;--color-bad:#c0453a;
+--cds-text-secondary:var(--muted);--cds-border:var(--line);--cds-surface-popover:var(--surface);--cds-shadow-popover:0 4px 14px rgba(0,0,0,.18);
+--cds-chart-grid:var(--line);--cds-chart-axis:var(--muted);--cds-chart-reference:var(--muted);
+--cds-font-size-title:clamp(1.7rem,4.5vw,2.4rem);--cds-font-size-heading:1.1rem;--cds-font-size-body:1.02rem;--cds-font-size-caption:.85rem;--cds-font-weight-medium:600;
+--cds-gap-xs:.25rem;--cds-gap-sm:.5rem;--cds-gap-md:1rem;--cds-gap-lg:1.5rem;--cds-pad-sm:.4rem;--cds-pad-md:.75rem;--cds-pad-lg:1.1rem;--cds-radius:6px;
+--font-anthropic-sans:var(--body);--font-anthropic-serif:var(--display)}
+.mk h1{font-family:var(--display);font-weight:700}
+.kpi .v{font-family:var(--display)}
+.back{margin:1rem 0 0;font-size:.9rem}
+
+
+.mk{max-width:1040px;margin:0 auto;font-family:var(--font-anthropic-sans);color:var(--color-fg)}
+.mk h1{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);margin:0 0 var(--cds-gap-sm)}
+.mk h2{font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium);margin:var(--cds-gap-lg) 0 var(--cds-gap-xs)}
+.mk .sub{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);margin:0 0 var(--cds-gap-sm)}
+.mk .lead{font-size:var(--cds-font-size-body);line-height:1.55;margin:0 0 var(--cds-gap-md);max-width:70ch}
+.mk b{font-weight:var(--cds-font-weight-medium);font-variant-numeric:tabular-nums}
+.mk-tabs{display:flex;gap:var(--cds-gap-xs);border-bottom:1px solid var(--color-border-line);margin:var(--cds-gap-md) 0}
+.mk-tab{font:inherit;background:none;border:0;border-bottom:2px solid transparent;padding:var(--cds-pad-sm) var(--cds-pad-md);color:var(--color-fg-muted);cursor:pointer}
+.mk-tab.on{color:var(--color-fg);border-bottom-color:var(--color-fg);font-weight:var(--cds-font-weight-medium)}
+.mk-card{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-lg);margin-bottom:var(--cds-gap-md);min-width:0}
+.mk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:var(--cds-gap-md)}
+.mk-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--cds-gap-sm);margin-bottom:var(--cds-gap-md)}
+.kpi{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-md);min-width:0}
+.kpi .n{display:flex;align-items:center;gap:6px;font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.kpi .sw{width:10px;height:10px;border-radius:2px;flex:none}
+.kpi .v{font-family:var(--font-anthropic-serif);font-size:26px;line-height:1.2;margin-top:4px;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin-top:2px}
+.mk-chart{min-height:260px;position:relative}
+.mk-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:var(--cds-font-size-caption);color:var(--cds-text-secondary)}
+.mk-legend i{display:inline-block;width:10px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.mk-tip{position:absolute;pointer-events:none;background:var(--cds-surface-popover);border:1px solid var(--cds-border);box-shadow:var(--cds-shadow-popover);color:var(--cds-text-secondary);border-radius:6px;padding:6px 8px;font-size:12px;white-space:nowrap;z-index:5}
+.mk-tip div{display:flex;gap:6px;align-items:center}
+.mk-tip i{display:inline-block;width:8px;height:8px;border-radius:2px}
+.mk-wrap{overflow-x:auto}
+.mk table{border-collapse:collapse;width:100%;font-size:var(--cds-font-size-caption);font-variant-numeric:tabular-nums}
+.mk th{font-weight:var(--cds-font-weight-medium);text-align:right;color:var(--color-fg-muted);padding:6px 8px;border-bottom:1px solid var(--color-border-line);white-space:nowrap}
+.mk td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--color-border-line);white-space:nowrap}
+.mk th:first-child,.mk td:first-child{text-align:left}
+.mk-note{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);line-height:1.5}
+.mk-note p{margin:0 0 6px}
+.mk-err{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
+@media print{.mk-tabs{display:none}.mk-sec[hidden]{display:block!important}#riesgo{break-before:page}}
+
+</style>
+</head>
+<body>
+<div class="mk">
+  <p class="back"><a href="../">&larr; Volver al portfolio</a></p>
+  <h1 id="titulo">Mercados y riesgo: cinco activos, diez años</h1>
+  <p class="lead" id="resumen">Entre <b data-draw="p_ini" data-source="serie" data-field="month" data-row="0">—</b> y <b data-draw="p_fin" data-source="serie" data-field="month" data-row="118">—</b>, <b data-draw="lead_name">—</b> fue el activo con mayor rentabilidad anual media (<b data-draw="lead_cagr" data-source="metricas" data-field="cagr">—</b>), pero también el que sufrió la mayor caída desde máximos (<b data-draw="lead_mdd" data-source="metricas" data-field="mdd">—</b>). El S&amp;P 500 rindió <b data-draw="spx_cagr" data-source="metricas" data-field="cagr" data-where="key=spx">—</b> anual con una caída máxima de <b data-draw="spx_mdd" data-source="metricas" data-field="mdd" data-where="key=spx">—</b>.</p>
+  <p class="sub">Precios medios mensuales en dólares, S&amp;P 500, Nasdaq Composite, bitcoin, oro y EUR/USD. Ejercicio de análisis con datos históricos, no una recomendación de inversión.</p>
+  <div class="mk-kpis" id="kpis" data-draw="kpis" data-source="metricas"></div>
+  <div class="mk-tabs" role="tablist">
+    <button class="mk-tab on" role="tab" aria-selected="true" data-tab="mercados" id="tab-mercados">Mercados</button>
+    <button class="mk-tab" role="tab" aria-selected="false" data-tab="riesgo" id="tab-riesgo">Riesgo y correlaciones</button>
+  </div>
+
+  <section class="mk-sec" id="mercados">
+    <div class="mk-card">
+      <h2 id="h-base">Evolución, con base 100 en <span data-draw="base_ini" data-source="serie" data-field="month" data-row="0">—</span></h2>
+      <p class="sub">Escala logarítmica: bitcoin multiplicó su valor por casi 100 y comprime el resto en escala lineal. Cada línea parte de 100.</p>
+      <div class="mk-chart dash-skeleton" data-draw="ch_base" data-source="serie"></div>
+    </div>
+    <div class="mk-card">
+      <h2 id="h-metricas">Rentabilidad y riesgo de cada activo</h2>
+      <p class="sub">Rentabilidad anual media compuesta; volatilidad anualizada sobre variaciones mensuales; caída máxima desde el máximo previo.</p>
+      <div class="mk-wrap"><table data-source="metricas" data-row-key="key"><thead><tr>
+        <th data-field="activo">Activo</th><th data-field="base100">Base 100 final</th><th data-field="cagr">Rent. anual</th><th data-field="vol">Volatilidad</th><th data-field="mdd">Caída máx.</th><th data-field="mdd_month">Mes de la caída</th><th data-field="best">Mejor mes</th><th data-field="worst">Peor mes</th><th data-field="ratio">Rent. / riesgo</th>
+      </tr></thead><tbody data-draw="tb_metricas"></tbody></table></div>
+    </div>
+    <div class="mk-card">
+      <h2 id="h-anual">Variación por año natural</h2>
+      <p class="sub">Del último precio medio mensual de un año al del anterior. 2026* llega hasta octubre.</p>
+      <div class="mk-wrap"><table data-source="anual" data-row-key="year"><thead><tr>
+        <th data-field="year">Año</th><th data-field="spx">S&amp;P 500</th><th data-field="ndq">Nasdaq</th><th data-field="btc">Bitcoin</th><th data-field="gold">Oro</th><th data-field="eurusd">EUR/USD</th>
+      </tr></thead><tbody data-draw="tb_anual"></tbody></table></div>
+    </div>
+  </section>
+
+  <section class="mk-sec" id="riesgo" hidden>
+    <div class="mk-card">
+      <h2 id="h-dd">Caída desde el máximo anterior</h2>
+      <p class="sub">0 % es un nuevo máximo. Cuanto más abajo, más lejos está el precio de su mejor nivel hasta ese mes.</p>
+      <div class="mk-chart dash-skeleton" data-draw="ch_dd" data-source="serie"></div>
+    </div>
+    <div class="mk-grid">
+      <div class="mk-card">
+        <h2 id="h-rr">Rentabilidad frente a volatilidad</h2>
+        <p class="sub">Arriba a la izquierda es mejor: más rentabilidad con menos oscilación.</p>
+        <div class="mk-chart dash-skeleton" data-draw="ch_rr" data-source="metricas"></div>
+      </div>
+      <div class="mk-card">
+        <h2 id="h-corr">Correlación entre activos</h2>
+        <p class="sub">Variaciones mensuales. 1 se mueven igual, 0 sin relación, negativo en sentido contrario.</p>
+        <div class="mk-wrap"><table data-source="correl" data-row-key="key"><thead><tr>
+          <th data-field="activo">Activo</th><th data-field="spx">S&amp;P 500</th><th data-field="ndq">Nasdaq</th><th data-field="btc">Bitcoin</th><th data-field="gold">Oro</th><th data-field="eurusd">EUR/USD</th>
+        </tr></thead><tbody data-draw="tb_corr"></tbody></table></div>
+      </div>
+    </div>
+    <div class="mk-grid">
+      <div class="mk-card">
+        <h2 id="h-roll">Bitcoin y S&amp;P 500: correlación móvil de 12 meses</h2>
+        <p class="sub">Sube y baja con el momento: no es una relación fija.</p>
+        <div class="mk-chart dash-skeleton" data-draw="ch_roll" data-source="corr12"></div>
+      </div>
+      <div class="mk-card">
+        <h2 id="h-baj">Qué hizo cada activo cuando el S&amp;P 500 cayó</h2>
+        <p class="sub">Variación media mensual en los <span data-draw="n_caidas" data-source="bajada" data-field="n_caidas" data-row="0">—</span> meses en que el S&amp;P 500 bajó.</p>
+        <div class="mk-chart dash-skeleton" data-draw="ch_baj" data-source="bajada"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mk-note" id="notas">
+    <p><b>Datos.</b> Precios medios mensuales, de diciembre de 2016 a octubre de 2026: S&amp;P 500, Nasdaq Composite, bitcoin (Coinbase) y EUR/USD de FRED (Reserva Federal de St. Louis); oro, serie mensual del repositorio público datasets/gold-prices de GitHub. Valores en dólares.</p>
+    <p><b>Limitación.</b> Al trabajar con medias mensuales, las caídas máximas y la volatilidad que se ven aquí son menores que las que muestran los precios diarios.</p>
+    <p><b>Aviso.</b> Análisis de datos históricos con fines ilustrativos. La rentabilidad pasada no garantiza la futura y esto no es una recomendación de inversión.</p>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script>
+(function(){
+  var reg={},store={};
+  window.dash={colors:['#0072B2','#CC79A7','#E69F00','#009E73','#7a8896'],
+    data:function(id){return store[id]?{status:'ok',data:store[id]}:{status:'loading',data:[]}},
+    draw:function(name,fn){if(typeof fn==='function')reg[name]=fn;else run(name)},
+    setLink:function(h){try{history.replaceState(null,'','#'+h)}catch(e){}requestAnimationFrame(runAll)}};
+  function run(n){document.querySelectorAll('[data-draw="'+n+'"]').forEach(function(el){if(!el.closest('[hidden]'))try{reg[n](el)}catch(e){console.error(n,e)}})}
+  function runAll(){Object.keys(reg).forEach(run)}
+  window.__dashRun=runAll;
+  var ids=['serie','metricas','correl','corr12','anual','bajada'];
+  window.__dashLoad=Promise.all(ids.map(function(id){return fetch('data/'+id+'.json').then(function(r){return r.json()}).then(function(j){store[id]=j.rows})}));
+  var t;window.addEventListener('resize',function(){clearTimeout(t);t=setTimeout(runAll,150)});
+})();
+</script>
+<script>
+(function(){
+  var KEYS=['spx','ndq','btc','gold','eurusd'];
+  var NAMES={spx:'S&P 500',ndq:'Nasdaq',btc:'Bitcoin',gold:'Oro',eurusd:'EUR/USD'};
+  var ES=d3.formatLocale({decimal:',',thousands:'.',grouping:[3],currency:['','']});
+  var f0=ES.format(',.0f'),f1=ES.format(',.1f'),f2=ES.format(',.2f');
+  var MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  function pc(v){return f1(v)+'\u00a0%'}
+  function sg(v){return (v>0?'+':'')+f1(v)+'\u00a0%'}
+  function mes(s){var p=String(s).split('-');return MES[+p[1]-1]+' '+p[0]}
+  function col(k){return dash.colors[KEYS.indexOf(k)%dash.colors.length]}
+  function ok(id,el){var g=dash.data(id);if(g.status==='ok'){el.classList.remove('dash-skeleton');return g.data}
+    if(g.status==='error'){el.classList.remove('dash-skeleton');el.textContent='No se pudieron cargar estos datos.';el.className=(el.className||'')+' mk-err'}
+    else if(el.tagName==='SPAN'||el.tagName==='B'){el.textContent='—'}
+    return null}
+  function setText(el,t){el.textContent=t}
+
+  /* pestañas */
+  var secs={mercados:document.getElementById('mercados'),riesgo:document.getElementById('riesgo')};
+  var tabs=document.querySelectorAll('.mk-tab');
+  function openTab(id){Object.keys(secs).forEach(function(k){secs[k].hidden=(k!==id)});
+    tabs.forEach(function(t){var on=t.getAttribute('data-tab')===id;t.classList.toggle('on',on);t.setAttribute('aria-selected',on?'true':'false')});
+    dash.setLink(id)}
+  tabs.forEach(function(t){t.addEventListener('click',function(){openTab(t.getAttribute('data-tab'))})});
+  var h=(location.hash||'').replace('#','');if(secs[h]&&h!=='mercados')openTab(h);
+  window.addEventListener('beforeprint',function(){Object.keys(secs).forEach(function(k){secs[k].hidden=false})});
+  window.addEventListener('afterprint',function(){var cur=document.querySelector('.mk-tab.on');openTab(cur?cur.getAttribute('data-tab'):'mercados')});
+
+  /* gráfico de líneas con cruce y tooltip */
+  function lineChart(el,o){
+    var w=Math.max(280,el.clientWidth),hh=o.height||300,m={t:10,r:14,b:26,l:o.left||46};
+    el.replaceChildren();
+    var wrap=d3.select(el).append('div').style('position','relative');
+    var svg=wrap.append('svg').attr('viewBox','0 0 '+w+' '+hh).attr('width','100%').attr('height',hh).attr('role','img').attr('aria-label',o.label).style('display','block');
+    var pa=d3.utcParse('%Y-%m'),xs=o.rows.map(function(r){return pa(r.month)});
+    var x=d3.scaleUtc().domain(d3.extent(xs)).range([m.l,w-m.r]);
+    var y=(o.log?d3.scaleLog():d3.scaleLinear()).domain(o.domain).range([hh-m.b,m.t]);
+    var gy=svg.append('g').attr('transform','translate('+m.l+',0)').call(d3.axisLeft(y).tickValues(o.ticks).tickFormat(o.yfmt).tickSize(-(w-m.l-m.r)));
+    gy.select('.domain').remove();gy.selectAll('line').style('stroke','var(--cds-chart-grid)');gy.selectAll('text').style('fill','var(--cds-text-secondary)').style('font-size','11px');
+    var gx=svg.append('g').attr('transform','translate(0,'+(hh-m.b)+')').call(d3.axisBottom(x).ticks(d3.utcYear.every(o.every||2)).tickFormat(d3.utcFormat('%Y')).tickSize(4));
+    gx.select('.domain').style('stroke','var(--cds-chart-axis)');gx.selectAll('line').style('stroke','var(--cds-chart-axis)');gx.selectAll('text').style('fill','var(--cds-text-secondary)').style('font-size','11px');
+    if(o.ref!==undefined)svg.append('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',y(o.ref)).attr('y2',y(o.ref)).style('stroke','var(--cds-chart-reference)').attr('stroke-dasharray','4 3');
+    o.series.forEach(function(s){
+      var ln=d3.line().x(function(r,i){return x(xs[i])}).y(function(r){return y(r[s.field])});
+      svg.append('path').attr('d',ln(o.rows)).attr('fill','none').style('stroke',s.color).attr('stroke-width',2).attr('stroke-linejoin','round');
+    });
+    var cur=svg.append('line').attr('y1',m.t).attr('y2',hh-m.b).style('stroke','var(--cds-chart-axis)').style('display','none');
+    var dots=o.series.map(function(s){return svg.append('circle').attr('r',4).style('fill',s.color).style('stroke','var(--color-panel)').attr('stroke-width',2).style('display','none')});
+    var tip=wrap.append('div').attr('class','mk-tip').style('display','none');
+    function show(ev){
+      var px=d3.pointer(ev,svg.node())[0]*(w/svg.node().getBoundingClientRect().width);
+      var i=d3.bisector(function(d){return d}).center(xs,x.invert(px));i=Math.max(0,Math.min(xs.length-1,i));
+      var cx=x(xs[i]);cur.attr('x1',cx).attr('x2',cx).style('display',null);
+      tip.style('display',null).text('');
+      tip.append('div').style('font-weight','600').style('color','var(--color-fg)').text(mes(o.rows[i].month));
+      o.series.forEach(function(s,j){var v=o.rows[i][s.field];dots[j].attr('cx',cx).attr('cy',y(v)).style('display',null);
+        var d=tip.append('div');d.append('i').style('background',s.color);d.append('span').text(s.name+': '+o.vfmt(v))});
+      var tw=tip.node().offsetWidth,left=cx+12;if(left+tw>w)left=cx-tw-12;tip.style('left',Math.max(0,left)+'px').style('top','8px');
+    }
+    function hide(){cur.style('display','none');dots.forEach(function(d){d.style('display','none')});tip.style('display','none')}
+    svg.append('rect').attr('x',m.l).attr('y',m.t).attr('width',w-m.l-m.r).attr('height',hh-m.t-m.b).attr('fill','transparent')
+      .on('pointermove',show).on('pointerdown',show).on('pointerleave',hide);
+    if(o.series.length>1||o.legend){var lg=d3.select(el).append('div').attr('class','mk-legend');
+      o.series.forEach(function(s){var it=lg.append('span');it.append('i').style('background',s.color);it.append('span').text(s.name)})}
+  }
+  function seriesOf(suf){return KEYS.map(function(k){return {field:k+suf,name:NAMES[k],color:col(k)}})}
+
+  /* frase inicial */
+  dash.draw('p_ini',function(el){var d=ok('serie',el);if(d)setText(el,mes(d[0].month))});
+  dash.draw('p_fin',function(el){var d=ok('serie',el);if(d)setText(el,mes(d[d.length-1].month))});
+  dash.draw('base_ini',function(el){var d=ok('serie',el);if(d)setText(el,mes(d[0].month))});
+  dash.draw('lead_name',function(el){var d=ok('metricas',el);if(!d)return;var l=d3.greatest(d,function(r){return r.cagr});setText(el,l.activo)});
+  dash.draw('lead_cagr',function(el){var d=ok('metricas',el);if(!d)return;var l=d3.greatest(d,function(r){return r.cagr});el.setAttribute('data-where','key='+l.key);setText(el,pc(l.cagr))});
+  dash.draw('lead_mdd',function(el){var d=ok('metricas',el);if(!d)return;var l=d3.greatest(d,function(r){return r.cagr});el.setAttribute('data-where','key='+l.key);setText(el,pc(l.mdd))});
+  dash.draw('spx_cagr',function(el){var d=ok('metricas',el);if(!d)return;setText(el,pc(d.filter(function(r){return r.key==='spx'})[0].cagr))});
+  dash.draw('spx_mdd',function(el){var d=ok('metricas',el);if(!d)return;setText(el,pc(d.filter(function(r){return r.key==='spx'})[0].mdd))});
+  dash.draw('n_caidas',function(el){var d=ok('bajada',el);if(d)setText(el,String(d[0].n_caidas))});
+
+  /* tarjetas */
+  dash.draw('kpis',function(el){var d=ok('metricas',el);if(!d)return;el.replaceChildren();
+    d.forEach(function(r){var c=document.createElement('div');c.className='kpi';
+      var n=document.createElement('div');n.className='n';var sw=document.createElement('span');sw.className='sw';sw.style.background=col(r.key);var nm=document.createElement('span');nm.textContent=r.activo;n.append(sw,nm);
+      var v=document.createElement('div');v.className='v';var vb=document.createElement('span');vb.setAttribute('data-source','metricas');vb.setAttribute('data-field','cagr');vb.setAttribute('data-where','key='+r.key);vb.textContent=pc(r.cagr);v.append(vb);
+      var s=document.createElement('div');s.className='s';s.append('rent. anual · caída máx. ');var sb=document.createElement('span');sb.setAttribute('data-source','metricas');sb.setAttribute('data-field','mdd');sb.setAttribute('data-where','key='+r.key);sb.textContent=pc(r.mdd);s.append(sb);
+      c.append(n,v,s);el.append(c)})});
+
+  /* gráficos */
+  dash.draw('ch_base',function(el){var d=ok('serie',el);if(!d)return;
+    lineChart(el,{rows:d,series:seriesOf('_b'),log:true,domain:[80,12000],ticks:[100,300,1000,3000,10000],yfmt:function(v){return f0(v)},vfmt:function(v){return f0(v)},label:'Evolución con base 100 de S&P 500, Nasdaq, bitcoin, oro y EUR/USD, en escala logarítmica',height:320,left:52})});
+  dash.draw('ch_dd',function(el){var d=ok('serie',el);if(!d)return;
+    lineChart(el,{rows:d,series:seriesOf('_d'),domain:[-80,0],ticks:[-80,-60,-40,-20,0],yfmt:function(v){return f0(v)+' %'},vfmt:function(v){return f1(v)+' %'},label:'Caída porcentual desde el máximo previo de cada activo',height:300,left:50})});
+  dash.draw('ch_roll',function(el){var d=ok('corr12',el);if(!d)return;
+    lineChart(el,{rows:d,series:[{field:'corr',name:'Correlación',color:col('btc')}],domain:[-1,1],ticks:[-1,-0.5,0,0.5,1],yfmt:function(v){return f1(v)},vfmt:function(v){return f2(v)},ref:0,label:'Correlación móvil de 12 meses entre bitcoin y el S&P 500',height:240,left:40})});
+
+  dash.draw('ch_rr',function(el){var d=ok('metricas',el);if(!d)return;el.replaceChildren();
+    var w=Math.max(280,el.clientWidth),hh=280,m={t:14,r:14,b:38,l:46};
+    var x=d3.scaleLinear().domain([0,75]).range([m.l,w-m.r]),y=d3.scaleLinear().domain([0,65]).range([hh-m.b,m.t]);
+    var wrap=d3.select(el).append('div').style('position','relative');
+    var svg=wrap.append('svg').attr('viewBox','0 0 '+w+' '+hh).attr('width','100%').attr('height',hh).attr('role','img').attr('aria-label','Rentabilidad anual frente a volatilidad anual de cada activo').style('display','block');
+    var gy=svg.append('g').attr('transform','translate('+m.l+',0)').call(d3.axisLeft(y).ticks(5).tickFormat(function(v){return f0(v)+' %'}).tickSize(-(w-m.l-m.r)));gy.select('.domain').remove();gy.selectAll('line').style('stroke','var(--cds-chart-grid)');gy.selectAll('text').style('fill','var(--cds-text-secondary)').style('font-size','11px');
+    var gx=svg.append('g').attr('transform','translate(0,'+(hh-m.b)+')').call(d3.axisBottom(x).ticks(5).tickFormat(function(v){return f0(v)+' %'}));gx.selectAll('path,line').style('stroke','var(--cds-chart-axis)');gx.selectAll('text').style('fill','var(--cds-text-secondary)').style('font-size','11px');
+    svg.append('text').attr('x',(m.l+w-m.r)/2).attr('y',hh-4).attr('text-anchor','middle').style('fill','var(--cds-text-secondary)').style('font-size','11px').text('Volatilidad anual');
+    var side={spx:'end',ndq:'start',btc:'end',gold:'end',eurusd:'start'},dy={spx:16,ndq:-8,btc:-10,gold:-10,eurusd:-8};
+    var tip=wrap.append('div').attr('class','mk-tip').style('display','none');
+    d.forEach(function(r){
+      var g=svg.append('g');
+      var c=g.append('circle').attr('cx',x(r.vol)).attr('cy',y(r.cagr)).attr('r',7).style('fill',col(r.key)).style('stroke','var(--color-panel)').attr('stroke-width',2);
+      g.append('text').attr('x',x(r.vol)+(side[r.key]==='end'?-11:11)).attr('y',y(r.cagr)+(dy[r.key]||4)).attr('text-anchor',side[r.key]||'start').style('fill','var(--color-fg)').style('font-size','12px').text(r.activo);
+      g.append('circle').attr('cx',x(r.vol)).attr('cy',y(r.cagr)).attr('r',16).attr('fill','transparent')
+        .on('pointermove pointerdown',function(){tip.style('display',null).text('');tip.append('div').style('font-weight','600').style('color','var(--color-fg)').text(r.activo);tip.append('div').text('Rentabilidad: '+pc(r.cagr));tip.append('div').text('Volatilidad: '+pc(r.vol));
+          var tw=tip.node().offsetWidth,l=x(r.vol)+14;if(l+tw>w)l=x(r.vol)-tw-14;tip.style('left',Math.max(0,l)+'px').style('top',Math.max(0,y(r.cagr)-20)+'px')})
+        .on('pointerleave',function(){tip.style('display','none')})});
+  });
+
+  dash.draw('ch_baj',function(el){var d=ok('bajada',el);if(!d)return;el.replaceChildren();
+    var w=Math.max(260,el.clientWidth),bh=34,hh=d.length*bh+26,m={t:4,r:54,b:22,l:124};
+    var ext=d3.extent(d,function(r){return r.en_caidas}),lo=Math.min(ext[0]*1.7,-1),hi=Math.max(ext[1],0.5);
+    var x=d3.scaleLinear().domain([lo,hi]).nice().range([m.l,w-m.r]),y=d3.scaleBand().domain(d.map(function(r){return r.key})).range([m.t,hh-m.b]).padding(0.3);
+    var wrap=d3.select(el).append('div').style('position','relative');
+    var svg=wrap.append('svg').attr('viewBox','0 0 '+w+' '+hh).attr('width','100%').attr('height',hh).attr('role','img').attr('aria-label','Variación media mensual de cada activo en los meses en que el S&P 500 cayó').style('display','block');
+    var gx=svg.append('g').attr('transform','translate(0,'+(hh-m.b)+')').call(d3.axisBottom(x).ticks(5).tickFormat(function(v){return f0(v)+' %'}).tickSize(-(hh-m.t-m.b)));gx.select('.domain').remove();gx.selectAll('line').style('stroke','var(--cds-chart-grid)');gx.selectAll('text').style('fill','var(--cds-text-secondary)').style('font-size','11px');
+    svg.append('line').attr('x1',x(0)).attr('x2',x(0)).attr('y1',m.t).attr('y2',hh-m.b).style('stroke','var(--cds-chart-axis)');
+    var tip=wrap.append('div').attr('class','mk-tip').style('display','none');
+    d.forEach(function(r){var v=r.en_caidas,x0=x(Math.min(0,v)),bw=Math.max(2,Math.abs(x(v)-x(0)));
+      svg.append('text').attr('x',m.l-8).attr('y',y(r.key)+y.bandwidth()/2+4).attr('text-anchor','end').style('fill','var(--color-fg)').style('font-size','12px').text(r.activo);
+      svg.append('rect').attr('x',x0).attr('y',y(r.key)).attr('width',bw).attr('height',y.bandwidth()).attr('rx',3).style('fill',col(r.key))
+        .on('pointermove pointerdown',function(){tip.style('display',null).text('');tip.append('div').style('font-weight','600').style('color','var(--color-fg)').text(r.activo);tip.append('div').text('Con el S&P 500 a la baja: '+sg(r.en_caidas)+' al mes');tip.append('div').text('Con el S&P 500 al alza: '+sg(r.en_subidas)+' al mes');
+          var tw=tip.node().offsetWidth,l=x(v)+10;if(l+tw>w)l=w-tw;tip.style('left',Math.max(0,l)+'px').style('top',(y(r.key)-4)+'px')})
+        .on('pointerleave',function(){tip.style('display','none')});
+      svg.append('text').attr('x',v<0?x(v)-6:x(v)+6).attr('y',y(r.key)+y.bandwidth()/2+4).attr('text-anchor',v<0?'end':'start').style('fill','var(--cds-text-secondary)').style('font-size','11px').text(sg(v))});
+  });
+
+  /* tablas */
+  function rows(tb,data,keyf,cells){tb.replaceChildren();data.forEach(function(r){var tr=document.createElement('tr');tr.setAttribute('data-key',String(r[keyf]));
+    cells(r).forEach(function(c,i){var td=document.createElement('td');td.textContent=c.t;if(c.bg)td.style.background=c.bg;tr.append(td)});tb.append(tr)})}
+  dash.draw('tb_metricas',function(tb){var d=ok('metricas',tb);if(!d)return;
+    rows(tb,d,'key',function(r){return [{t:r.activo},{t:f0(r.base100)},{t:pc(r.cagr)},{t:pc(r.vol)},{t:pc(r.mdd)},{t:mes(r.mdd_month)},{t:sg(r.best)},{t:sg(r.worst)},{t:f2(r.ratio)}]})});
+  dash.draw('tb_anual',function(tb){var d=ok('anual',tb);if(!d)return;
+    function heat(v){var a=Math.min(Math.abs(v)/50,1)*60;return 'color-mix(in srgb, '+(v>=0?'var(--color-ok)':'var(--color-bad)')+' '+Math.round(a)+'%, transparent)'}
+    rows(tb,d,'year',function(r){return [{t:r.year}].concat(KEYS.map(function(k){return {t:sg(r[k]),bg:heat(r[k])}}))})});
+  dash.draw('tb_corr',function(tb){var d=ok('correl',tb);if(!d)return;
+    function heat(v){var a=Math.max(0,Math.abs(v))*70;return 'color-mix(in srgb, '+dash.colors[0]+' '+Math.round(a)+'%, transparent)'}
+    rows(tb,d,'key',function(r){return [{t:r.activo}].concat(KEYS.map(function(k){return {t:f2(r[k]),bg:heat(r[k])}}))})});
+})();
+</script>
+<script>
+window.__dashLoad.then(function(){window.__dashRun()}).catch(function(){document.querySelectorAll('.mk-chart').forEach(function(e){e.textContent='No se pudieron cargar los datos.'})});
+</script>
+</body>
+</html>
