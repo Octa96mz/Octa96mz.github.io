@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Proyecto demo de CRM: modelo de datos, pipeline comercial, puntuación de leads y control de calidad de datos, con un flujo de captación en n8n. Datos ficticios.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CRM de prospección: demo">
+<meta property="og:description" content="Pipeline comercial, puntuación de leads y calidad de datos, con un flujo de captación en n8n.">
+<meta property="og:url" content="https://octa96mz.github.io/crm-demo/">
+<title>CRM de prospección, demo | Octavio Montoya Zanini</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+:root{--bg:#f3f5f7;--surface:#ffffff;--fg:#14202b;--muted:#566574;--line:#d6dde4;--accent:#0b6e6e;--warn:#9a5b00;--bad:#a63a2f;--ok:#1f7a45;--display:'Space Grotesk',system-ui,sans-serif;--body:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f161d;--surface:#16202a;--fg:#e6edf3;--muted:#9aabba;--line:#27343f;--accent:#5ec4c0;--warn:#e0a548;--bad:#e27a6e;--ok:#6fcf97;color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html[data-lang="es"] .en,html[data-lang="en"] .es{display:none!important}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);margin:0;padding-block:0 4rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:70rem;margin:0 auto}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:.75rem 1.25rem;padding-block:1.1rem;border-bottom:1px solid var(--line);flex-wrap:wrap;font-size:.9rem}
+.lang,.btn{font:500 .8rem var(--mono);background:none;border:1px solid var(--line);color:var(--fg);padding:.3rem .6rem;border-radius:4px;cursor:pointer}
+.btn:hover,.lang:hover{border-color:var(--accent)}
+h1{font:700 clamp(1.7rem,4.5vw,2.4rem)/1.2 var(--display);margin:1.6rem 0 .6rem}
+h2{font:700 1.25rem/1.3 var(--display);margin:0 0 .35rem}
+h3{font:600 1rem/1.3 var(--display);margin:0 0 .4rem}
+.lead{max-width:68ch;font-size:1.05rem}
+.sub{color:var(--muted);font-size:.88rem;margin:.2rem 0 .8rem;max-width:72ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1.2rem 1.3rem;margin:1.1rem 0;min-width:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.7rem;margin:1.2rem 0}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;min-width:0}
+.kpi .v{font:700 1.6rem/1.2 var(--display);font-variant-numeric:tabular-nums}
+.kpi .s{font-size:.82rem;color:var(--muted)}
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,1fr);gap:.7rem;overflow-x:auto;padding-bottom:.4rem}
+.col{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.6rem;min-width:0}
+.col h3{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.lead-card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:.55rem .65rem;margin-top:.5rem;font-size:.85rem;min-width:0}
+.lead-card b{display:block;font-weight:600;overflow-wrap:anywhere}
+.lead-card .m{display:block;color:var(--muted);font-size:.78rem;overflow-wrap:anywhere}
+.lead-card .row{display:flex;justify-content:space-between;align-items:center;gap:.4rem;margin-top:.4rem}
+.chip{font:500 .72rem var(--mono);padding:.1rem .45rem;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.chip.hot{color:var(--ok);border-color:var(--ok)}
+.chip.warm{color:var(--warn);border-color:var(--warn)}
+.chip.cold{color:var(--muted)}
+.mv{display:flex;gap:.25rem}
+.mv button{font:500 .8rem var(--mono);background:none;border:1px solid var(--line);color:var(--fg);border-radius:4px;cursor:pointer;padding:.1rem .45rem;min-width:2rem}
+.mv button:disabled{opacity:.35;cursor:default}
+.wrap-x{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.88rem;font-variant-numeric:tabular-nums}
+th{font-weight:600;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n,th.n{text-align:right}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.tools{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:.4rem 0 .8rem}
+select{font:500 .85rem var(--body);background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:.3rem .5rem}
+ul.pts{margin:.3rem 0 0;padding-left:1.1rem}
+ul.pts li{margin:.2rem 0}
+.issue{border-left:3px solid var(--warn);padding:.15rem .6rem;margin:.4rem 0;font-size:.88rem}
+.issue.bad{border-color:var(--bad)}
+.note{font-size:.85rem;color:var(--muted);max-width:75ch}
+code{font:.85em var(--mono);overflow-wrap:anywhere}
+ol.flow{counter-reset:s;list-style:none;padding:0;margin:.4rem 0 0}
+ol.flow li{counter-increment:s;margin:.45rem 0;padding-left:2rem;position:relative}
+ol.flow li::before{content:counter(s);position:absolute;left:0;top:.05rem;width:1.35rem;height:1.35rem;border-radius:50%;border:1px solid var(--accent);color:var(--accent);font:500 .75rem/1.25rem var(--mono);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a href="../">&larr; <span class="es">Volver al portfolio</span><span class="en">Back to portfolio</span></a>
+  <button class="lang" id="lang" type="button" aria-label="Cambiar idioma / Switch language">ES / EN</button>
+</header>
+
+<h1><span class="es">CRM de prospección: proyecto demo</span><span class="en">Prospecting CRM: demo project</span></h1>
+<p class="lead"><span class="es">Demostración de cómo organizo la información comercial en un CRM: un modelo de datos claro, un pipeline por etapas, una puntuación de leads con reglas explícitas y controles de calidad del dato. Incluye el flujo de n8n que capta y califica los leads desde un formulario.</span><span class="en">A demonstration of how I organise sales information in a CRM: a clear data model, a staged pipeline, lead scoring with explicit rules and data quality checks. It includes the n8n workflow that captures and qualifies leads from a form.</span></p>
+<p class="sub"><span class="es">Proyecto de demostración con datos ficticios. No usa datos de ningún cliente ni de ninguna empresa real. El pipeline es interactivo: probá a mover los leads entre etapas.</span><span class="en">Demonstration project with fictional data. It uses no data from any client or real company. The pipeline is interactive: try moving leads between stages.</span></p>
+
+<div class="kpis" id="kpis" aria-live="polite"></div>
+
+<section class="card">
+  <h2><span class="es">Pipeline comercial</span><span class="en">Sales pipeline</span></h2>
+  <div class="tools">
+    <label><span class="es">Fuente</span><span class="en">Source</span>: <select id="fsrc"></select></label>
+    <label><span class="es">Nivel</span><span class="en">Level</span>: <select id="flvl"></select></label>
+    <button class="btn" id="reset" type="button"><span class="es">Restablecer datos</span><span class="en">Reset data</span></button>
+  </div>
+  <div class="board" id="board"></div>
+</section>
+
+<div class="grid2">
+<section class="card">
+  <h2><span class="es">Rendimiento por fuente</span><span class="en">Performance by source</span></h2>
+  <div class="wrap-x"><table id="bysrc"></table></div>
+</section>
+<section class="card">
+  <h2><span class="es">Calidad de datos</span><span class="en">Data quality</span></h2>
+  <p class="sub"><span class="es">Comprobaciones automáticas sobre los contactos cargados.</span><span class="en">Automatic checks on the loaded contacts.</span></p>
+  <div id="dq"></div>
+</section>
+</div>
+
+<section class="card">
+  <h2><span class="es">Puntuación de leads</span><span class="en">Lead scoring</span></h2>
+  <p class="sub"><span class="es">Reglas sencillas y explicables, de 0 a 100. Se pueden ajustar al negocio.</span><span class="en">Simple, explainable rules, from 0 to 100. They can be adjusted to the business.</span></p>
+  <div class="wrap-x"><table>
+    <thead><tr><th><span class="es">Criterio</span><span class="en">Criterion</span></th><th><span class="es">Regla</span><span class="en">Rule</span></th><th class="n"><span class="es">Puntos</span><span class="en">Points</span></th></tr></thead>
+    <tbody>
+      <tr><td><span class="es">Fuente</span><span class="en">Source</span></td><td><span class="es">Referido 30, evento 20, web 20, LinkedIn 15, email en frío 5</span><span class="en">Referral 30, event 20, web 20, LinkedIn 15, cold email 5</span></td><td class="n"><span class="es">5 a 30</span><span class="en">5 to 30</span></td></tr>
+      <tr><td><span class="es">Tamaño</span><span class="en">Size</span></td><td><span class="es">11 a 50 empleados 20, más de 50 15, hasta 10 10</span><span class="en">11 to 50 employees 20, over 50 15, up to 10 10</span></td><td class="n"><span class="es">10 a 20</span><span class="en">10 to 20</span></td></tr>
+      <tr><td><span class="es">Cargo</span><span class="en">Role</span></td><td><span class="es">Dirección o gerencia 25, responsable 15, otros 5</span><span class="en">Management or owner 25, team lead 15, other 5</span></td><td class="n"><span class="es">5 a 25</span><span class="en">5 to 25</span></td></tr>
+      <tr><td><span class="es">Teléfono</span><span class="en">Phone</span></td><td><span class="es">Teléfono válido +10</span><span class="en">Valid phone +10</span></td><td class="n"><span class="es">0 a 10</span><span class="en">0 to 10</span></td></tr>
+      <tr><td><span class="es">Email</span><span class="en">Email</span></td><td><span class="es">Email con formato no válido −20</span><span class="en">Email with invalid format −20</span></td><td class="n"><span class="es">−20 a 0</span><span class="en">−20 to 0</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><span class="es">Niveles: caliente desde 70, templado de 40 a 69, frío por debajo de 40. El nivel decide la tarea de seguimiento: los calientes avisan al responsable en el momento; el resto entra en la revisión semanal.</span><span class="en">Levels: hot from 70, warm 40 to 69, cold below 40. The level decides the follow-up task: hot leads notify the owner immediately; the rest go into the weekly review.</span></p>
+</section>
+
+<section class="card">
+  <h2><span class="es">Modelo de datos</span><span class="en">Data model</span></h2>
+  <div class="wrap-x"><table>
+    <thead><tr><th><span class="es">Entidad</span><span class="en">Entity</span></th><th><span class="es">Campos principales</span><span class="en">Main fields</span></th><th><span class="es">Para qué sirve</span><span class="en">Purpose</span></th></tr></thead>
+    <tbody>
+      <tr><td><span class="es">Contacto</span><span class="en">Contact</span></td><td><code><span class="es">nombre, cargo, email, teléfono, fuente</span><span class="en">name, role, email, phone, source</span></code></td><td><span class="es">Persona con la que se habla. El email es la clave única para evitar duplicados.</span><span class="en">The person being contacted. Email is the unique key that prevents duplicates.</span></td></tr>
+      <tr><td><span class="es">Empresa</span><span class="en">Company</span></td><td><code><span class="es">nombre, sector, empleados</span><span class="en">name, sector, employees</span></code></td><td><span class="es">Agrupa contactos y alimenta la puntuación por tamaño.</span><span class="en">Groups contacts and feeds the size score.</span></td></tr>
+      <tr><td><span class="es">Oportunidad</span><span class="en">Deal</span></td><td><code><span class="es">etapa, puntuación, responsable, fecha</span><span class="en">stage, score, owner, date</span></code></td><td><span class="es">Seguimiento por etapas, de nuevo a ganado o perdido.</span><span class="en">Stage tracking, from new to won or lost.</span></td></tr>
+      <tr><td><span class="es">Actividad</span><span class="en">Activity</span></td><td><code><span class="es">tipo, fecha, nota</span><span class="en">type, date, note</span></code></td><td><span class="es">Historial de llamadas, correos y reuniones; detecta leads sin contacto reciente.</span><span class="en">History of calls, emails and meetings; flags leads with no recent contact.</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="card">
+  <h2><span class="es">Flujo de captación en n8n</span><span class="en">Lead capture workflow in n8n</span></h2>
+  <ol class="flow">
+    <li><span class="es"><b>Entrada.</b> Un formulario envía los datos a un webhook.</span><span class="en"><b>Input.</b> A form sends the data to a webhook.</span></li>
+    <li><span class="es"><b>Limpieza y puntuación.</b> Se normalizan email y teléfono, se valida el formato y se calcula la puntuación con las reglas de arriba.</span><span class="en"><b>Cleaning and scoring.</b> Email and phone are normalised, the format is validated and the score is calculated with the rules above.</span></li>
+    <li><span class="es"><b>Control de calidad.</b> Si el email no es válido, el lead va a una hoja de revisión y no entra en el CRM.</span><span class="en"><b>Quality gate.</b> If the email is invalid, the lead goes to a review sheet and does not enter the CRM.</span></li>
+    <li><span class="es"><b>Alta sin duplicados.</b> Se crea o se actualiza el contacto usando el email como clave.</span><span class="en"><b>No-duplicate insert.</b> The contact is created or updated using email as the key.</span></li>
+    <li><span class="es"><b>Seguimiento.</b> Los leads calientes generan un aviso inmediato por Telegram al responsable.</span><span class="en"><b>Follow-up.</b> Hot leads trigger an immediate Telegram alert to the owner.</span></li>
+  </ol>
+  <p class="note"><span class="es">El flujo está preparado para conectarse a una hoja de cálculo o a un CRM por API. <a href="workflow-captacion-leads.json" download>Descargar el flujo de n8n (JSON)</a>.</span><span class="en">The workflow is ready to connect to a spreadsheet or to a CRM through its API. <a href="workflow-captacion-leads.json" download>Download the n8n workflow (JSON)</a>.</span></p>
+</section>
+
+</div>
+<script>
+(function(){
+  var root=document.documentElement,lang='es';
+  try{lang=localStorage.getItem('lang')||((navigator.language||'es').slice(0,2)==='en'?'en':'es')}catch(e){}
+  function set(l){lang=l;root.setAttribute('data-lang',l);root.lang=l;try{localStorage.setItem('lang',l)}catch(e){}}
+  set(lang);
+  document.getElementById('lang').addEventListener('click',function(){set(lang==='es'?'en':'es')});
+})();
+
+(function(){
+  function b(es,en){return '<span class="es">'+es+'</span><span class="en">'+en+'</span>'}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  var STAGES=[
+    {k:'nuevo',es:'Nuevo',en:'New'},
+    {k:'contactado',es:'Contactado',en:'Contacted'},
+    {k:'reunion',es:'Reunión',en:'Meeting'},
+    {k:'propuesta',es:'Propuesta',en:'Proposal'},
+    {k:'ganado',es:'Ganado',en:'Won'},
+    {k:'perdido',es:'Perdido',en:'Lost'}
+  ];
+  var SOURCES={'referido':{es:'Referido',en:'Referral',p:30},'evento':{es:'Evento',en:'Event',p:20},'web':{es:'Web',en:'Web',p:20},'linkedin':{es:'LinkedIn',en:'LinkedIn',p:15},'email frio':{es:'Email en frío',en:'Cold email',p:5}};
+  var SEED=[
+    ['Elena Marín','Asesoría Nord','Directora','elena@asesoria-nord.test','+34 600 000 101','referido',32,'propuesta',2],
+    ['Pau Costa','Gestoría Orión','Gerente','pau@gestoria-orion.test','+34 600 000 102','linkedin',18,'reunion',5],
+    ['Laia Serra','Estudio Lumen','Responsable de marketing','laia@estudio-lumen.test','+34 600 000 103','web',9,'contactado',3],
+    ['Marc Vidal','Clínica Albor','Dirección','marc@clinica-albor.test','+34 600 000 104','evento',24,'reunion',6],
+    ['Núria Pons','Taller Brisa','Propietaria','nuria@taller-brisa.test','','linkedin',6,'nuevo',1],
+    ['Joan Ferrer','Logística Ámbar','Responsable de compras','joan@logistica-ambar.test','+34 600 000 106','email frio',85,'contactado',9],
+    ['Carla Roca','Academia Faro','Directora','carla@academia-faro.test','+34 600 000 107','web',14,'propuesta',4],
+    ['Biel Soler','Ferretería Norte','Gerente','biel@ferreteria-norte.test','+34 600 000 108','referido',7,'ganado',12],
+    ['Sara Gil','Hotel Cala','Dirección','sara-cala','+34 600 000 109','web',40,'nuevo',0],
+    ['Ona Mas','Consultoría Alba','Coordinadora','ona@consultoria-alba.test','+34 600 000 110','linkedin',22,'contactado',21],
+    ['Pol Bosch','Imprenta Delta','Gerente','pol@imprenta-delta.test','+34 600 000 111','email frio',12,'perdido',30],
+    ['Elena Marín','Asesoría Nord','Directora','elena@asesoria-nord.test','+34 600 000 101','evento',32,'nuevo',1],
+    ['Aina Prat','Nutrición Sol','Fundadora','aina@nutricion-sol.test','+34 600 000 113','evento',4,'ganado',15],
+    ['Iván Rius','Reformas Cobre','Responsable','ivan@reformas-cobre.test','','email frio',16,'nuevo',11],
+    ['Mireia Fort','Óptica Vela','Dirección','mireia@optica-vela.test','+34 600 000 115','referido',11,'reunion',2],
+    ['Gerard Mir','Despacho Ítaca','Socio director','gerard@despacho-itaca.test','+34 600 000 116','linkedin',48,'propuesta',3]
+  ];
+  var leads=[];
+  function load(){leads=SEED.map(function(r,i){return {id:i+1,nombre:r[0],empresa:r[1],cargo:r[2],email:r[3],tel:r[4],fuente:r[5],emp:r[6],etapa:r[7],dias:r[8]}})}
+  load();
+  var EMAIL=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  var DEC=/(direcci[oó]n|directora|director|gerente|gerencia|ceo|fundador|fundadora|propietari|due[ñn]o|socio)/i;
+  var RESP=/(responsable|jefe|head|manager|coordinador)/i;
+  function score(l){
+    var s=0;
+    s+=(SOURCES[l.fuente]||{p:5}).p;
+    s+=l.emp>=51?15:l.emp>=11?20:10;
+    s+=DEC.test(l.cargo)?25:RESP.test(l.cargo)?15:5;
+    s+=(l.tel.replace(/[^\d+]/g,'').length>=9)?10:0;
+    if(!EMAIL.test(l.email))s-=20;
+    return Math.max(0,Math.min(100,s));
+  }
+  function level(s){return s>=70?'hot':s>=40?'warm':'cold'}
+  var LV={hot:{es:'Caliente',en:'Hot'},warm:{es:'Templado',en:'Warm'},cold:{es:'Frío',en:'Cold'}};
+  var fsrc=document.getElementById('fsrc'),flvl=document.getElementById('flvl');
+  fsrc.innerHTML='<option value="">'+'Todas / All'+'</option>'+Object.keys(SOURCES).map(function(k){return '<option value="'+k+'">'+SOURCES[k].es+' / '+SOURCES[k].en+'</option>'}).join('');
+  flvl.innerHTML='<option value="">Todos / All</option>'+Object.keys(LV).map(function(k){return '<option value="'+k+'">'+LV[k].es+' / '+LV[k].en+'</option>'}).join('');
+  fsrc.addEventListener('change',render);flvl.addEventListener('change',render);
+  document.getElementById('reset').addEventListener('click',function(){load();render()});
+
+  function move(id,d){
+    var l=leads.filter(function(x){return x.id===id})[0];if(!l)return;
+    var i=STAGES.map(function(s){return s.k}).indexOf(l.etapa)+d;
+    if(i<0||i>=STAGES.length)return;
+    l.etapa=STAGES[i].k;l.dias=0;render();
+  }
+  document.getElementById('board').addEventListener('click',function(e){
+    var t=e.target.closest('button[data-id]');if(!t||t.disabled)return;
+    move(+t.getAttribute('data-id'),+t.getAttribute('data-d'));
+  });
+
+  function render(){
+    var fs=fsrc.value,fl=flvl.value;
+    var vis=leads.filter(function(l){return (!fs||l.fuente===fs)&&(!fl||level(score(l))===fl)});
+    // board
+    document.getElementById('board').innerHTML=STAGES.map(function(st,si){
+      var items=vis.filter(function(l){return l.etapa===st.k});
+      return '<div class="col"><h3><span>'+b(st.es,st.en)+'</span><span>'+items.length+'</span></h3>'+items.map(function(l){
+        var sc=score(l),lv=level(sc);
+        return '<div class="lead-card"><b>'+esc(l.nombre)+'</b><span class="m">'+esc(l.empresa)+' · '+esc(l.cargo)+'</span><span class="m">'+b(SOURCES[l.fuente].es,SOURCES[l.fuente].en)+'</span>'+
+          '<div class="row"><span class="chip '+lv+'">'+sc+' · '+b(LV[lv].es,LV[lv].en)+'</span><span class="mv">'+
+          '<button type="button" data-id="'+l.id+'" data-d="-1" aria-label="Etapa anterior / Previous stage"'+(si===0?' disabled':'')+'>&larr;</button>'+
+          '<button type="button" data-id="'+l.id+'" data-d="1" aria-label="Etapa siguiente / Next stage"'+(si===STAGES.length-1?' disabled':'')+'>&rarr;</button></span></div></div>';
+      }).join('')+'</div>';
+    }).join('');
+    // kpis (on all leads)
+    var total=leads.length,won=leads.filter(function(l){return l.etapa==='ganado'}).length,lost=leads.filter(function(l){return l.etapa==='perdido'}).length;
+    var open=total-won-lost,avg=Math.round(leads.reduce(function(a,l){return a+score(l)},0)/total);
+    var hot=leads.filter(function(l){return level(score(l))==='hot'&&l.etapa!=='ganado'&&l.etapa!=='perdido'}).length;
+    var rate=(won+lost)?Math.round(won/(won+lost)*100)+'%':'-';
+    document.getElementById('kpis').innerHTML=
+      kpi(total,b('leads en el CRM','leads in the CRM'))+kpi(open,b('oportunidades abiertas','open deals'))+
+      kpi(hot,b('leads calientes abiertos','open hot leads'))+kpi(rate,b('ganados sobre cerrados','won over closed'))+kpi(avg,b('puntuación media','average score'));
+    // by source
+    var rows=Object.keys(SOURCES).map(function(k){
+      var g=leads.filter(function(l){return l.fuente===k});if(!g.length)return '';
+      var w=g.filter(function(l){return l.etapa==='ganado'}).length;
+      var a=Math.round(g.reduce(function(x,l){return x+score(l)},0)/g.length);
+      return '<tr><td>'+b(SOURCES[k].es,SOURCES[k].en)+'</td><td class="n">'+g.length+'</td><td class="n">'+w+'</td><td class="n">'+a+'</td></tr>';
+    }).join('');
+    document.getElementById('bysrc').innerHTML='<thead><tr><th>'+b('Fuente','Source')+'</th><th class="n">Leads</th><th class="n">'+b('Ganados','Won')+'</th><th class="n">'+b('Punt. media','Avg. score')+'</th></tr></thead><tbody>'+rows+'</tbody>';
+    // data quality
+    var seen={},dups=[],bad=[],nophone=[],stale=[];
+    leads.forEach(function(l){
+      var k=l.email.toLowerCase();
+      if(EMAIL.test(l.email)){if(seen[k]){dups.push(l)}else{seen[k]=1}}else bad.push(l);
+      if(!l.tel)nophone.push(l);
+      if(l.dias>14&&l.etapa!=='ganado'&&l.etapa!=='perdido')stale.push(l);
+    });
+    function names(a){return a.map(function(l){return esc(l.nombre)+' ('+esc(l.empresa)+')'}).join(', ')}
+    var out='';
+    out+=dq(dups.length,'bad',b('Contactos duplicados por email','Duplicate contacts by email'),names(dups),b('Fusionar en un solo registro y conservar el historial.','Merge into one record and keep the history.'));
+    out+=dq(bad.length,'bad',b('Emails con formato no válido','Emails with invalid format'),names(bad),b('Corregir antes de enviar cualquier campaña.','Fix before sending any campaign.'));
+    out+=dq(nophone.length,'',b('Contactos sin teléfono','Contacts without a phone'),names(nophone),b('Completar al siguiente contacto.','Complete at the next contact.'));
+    out+=dq(stale.length,'',b('Leads abiertos sin contacto en más de 14 días','Open leads with no contact in over 14 days'),names(stale),b('Programar seguimiento o cerrar como perdido.','Schedule follow-up or close as lost.'));
+    document.getElementById('dq').innerHTML=out||('<p class="note">'+b('Sin incidencias.','No issues.')+'</p>');
+  }
+  function kpi(v,s){return '<div class="kpi"><div class="v">'+v+'</div><div class="s">'+s+'</div></div>'}
+  function dq(n,cls,title,list,fix){
+    if(!n)return '';
+    return '<div class="issue '+cls+'"><b>'+n+' · '+title+'</b><br><span class="note">'+list+'</span><br><span class="note">'+fix+'</span></div>';
+  }
+  render();
+})();
+</script>
+</body>
+</html>
